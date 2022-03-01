@@ -102,7 +102,7 @@ func fillFibonacciArray(_ array: inout [Int], length n:Int){// функция д
 
 func sieveOfEratosthenes(array: inout [Int], p:Int, firstIndex:Int) -> Int{// функция, реализующая шаг просеивания в методе Эратосфена
    var i:Int = firstIndex
-   for _ in firstIndex ..< array.count {
+   array.removeAll(where: (Int) throws -> Bool)
        if (array[i] % p == 0)
        {
            array.remove(at: i)
