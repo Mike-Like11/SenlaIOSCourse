@@ -10,11 +10,11 @@ import Foundation
 
 func squareFunc(a:Float,b:Float,c:Float)->[Float]{// функция, возвращающая корни квадратного уравнения
     let d = pow(b, 2) - 4 * a * c
-    if(d < 0){
+    if d < 0 {
         return []
     }
     else{
-        if(d == 0){
+        if d == 0 {
             return [(0 - b) / (2 * a)]
         }
         else{
@@ -26,19 +26,19 @@ func squareFunc(a:Float,b:Float,c:Float)->[Float]{// функция, возвр�
 
 
 func cubicFunc(a: Float, b: Float, c: Float, d: Float) -> [Float] {// функция, решающая уравнение 3 степени
-    if (a == 0 && b == 0){
+    if a == 0 && b == 0{
         return [(-d * 1.0) / c]
     }
     else{
-        if (a == 0){
+        if  a == 0 {
             return squareFunc(a: b, b: c, c: d)
         }
         else{
             let f = ((3.0 * c / a) - ((pow(b,2)) / (pow(a,2)))) / 3.0
             let g = (((2.0 * (pow(b,3))) / (pow(a,3))) - ((9.0 * b * c) / (pow(a,2))) + (27.0 * d / a)) / 27.0
             let h = ((pow(g,2)) / 4.0 + (pow(f,3)) / 27.0)
-            if (f == 0 && g == 0 && h == 0){
-                if (d / a) >= 0{
+            if  f == 0 && g == 0 && h == 0 {
+                if d / a >= 0 {
                            return [pow((d / (1.0 * a)) , (1 / 3.0)) * -1]
                 }
                 else{
@@ -46,7 +46,7 @@ func cubicFunc(a: Float, b: Float, c: Float, d: Float) -> [Float] {// функц
                 }
             }
             else{
-                if h<=0{
+                if h<=0 {
                     let i = sqrt((pow(g,2)/4.0) - h)
                     let j = pow(i,(1 / 3.0))
                     let k = acos(-(g / (2 * i)))
@@ -63,17 +63,17 @@ func cubicFunc(a: Float, b: Float, c: Float, d: Float) -> [Float] {// функц
                     let R = -(g / 2.0) + sqrt(h)
                     var S:Float = 0
                     var U:Float = 0
-                    if R >= 0{
+                    if R >= 0 {
                         S = pow(R, (1 / 3.0))
                     }
-                    else{
+                    else {
                         S = pow((-R),(1 / 3.0)) * -1
                     }
                      let T = -(g / 2.0) - sqrt(h)
                     if T >= 0{
                          U = (pow(T,(1 / 3.0)))
                     }
-                    else{
+                    else {
                          U = pow((-T),(1 / 3.0)) * -1
                     }
                     return [(S + U) - (b / (3.0 * a))]
@@ -84,7 +84,7 @@ func cubicFunc(a: Float, b: Float, c: Float, d: Float) -> [Float] {// функц
 }
 
 func findFibonacci(index:Int) -> Int{// функция поиска числа Фибоначчи по порядковому номеру
-    if (index == 1 || index == 2) {
+    if index == 1 || index == 2 {
             return 1
         }
     else {
@@ -95,29 +95,24 @@ func findFibonacci(index:Int) -> Int{// функция поиска числа �
 
 func fillFibonacciArray(_ array: inout [Int], length n:Int){// функция добавления в массив чисел Фибоначчи
     for _ in 0 ..< n {
-        fibonacciArray.append(findFibonacci(index: fibonacciArray.count+1))
+        array.append(findFibonacci(index: array.count+1))
     }
 }
 
 
-func sieveOfEratosthenes(array: inout [Int], p:Int, firstIndex:Int) -> Int{// функция, реализующая шаг просеивания в методе Эратосфена
-   var i:Int = firstIndex
-   array.removeAll(where: (Int) throws -> Bool)
-       if (array[i] % p == 0)
-       {
-           array.remove(at: i)
-           
-       }
-       else{
-           i += 1
-       }
-   }
-    array.forEach()
-       if(array[i] > p){
-           return array[i]
-       }
-   }
-   return array.first!
+func sieveOfEratosthenes(array: inout [Int], p:Int, firstIndex:Int) -> Int {// функция, реализующая шаг просеивания в методе Эратосфена
+    array.removeAll(where: { $0 % p == 0})
+    if let firstElement = array.first(where: { $0 > p }) {
+        return firstElement
+    }
+    else {
+        if let firstElement = array.first {
+            return firstElement
+        }
+        else {
+            return -100
+        }
+    }
 }
 
 
@@ -125,8 +120,11 @@ func sieveOfEratosthenes(array: inout [Int], p:Int, firstIndex:Int) -> Int{// ф
 func primeArray(n: Int) -> [Int] {// функция, возвращающая массив простыми чисел
     let spisok = [Int](2...n)
     var i = 2
-     while (i < array.count){
+     while i < array.count {
          i = sieveOfEratosthenes(array: &array, p: i, firstIndex: i)
+         if i == -100 {
+             return []
+         }
      }
     return spisok
 }
@@ -136,7 +134,7 @@ print("Корни квадратного уравнения: ", squareFunc(a: 1,
 print("Корни уравнения 3 степени: ", cubicFunc(a: 1, b: -3, c: -13, d: 15))
 
 var array = [Int]()
-fibonacciArray(fibonacciArray: &array,n: 10)
+fillFibonacciArray(&array, length: 10)
 print("Массив чисел Фибоначчи: ", array)
 
 print("Массив простых чисел: ", primeArray(n: 50))
