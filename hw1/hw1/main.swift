@@ -112,7 +112,7 @@ func sieveOfEratosthenes(array: inout [Int], p:Int, firstIndex:Int) -> Int{// ф
            i += 1
        }
    }
-   for i in 0 ..< array.count{
+    array.forEach()
        if(array[i] > p){
            return array[i]
        }
