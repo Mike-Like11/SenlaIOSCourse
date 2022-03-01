@@ -93,7 +93,7 @@ func findFibonacci(index:Int) -> Int{// функция поиска числа �
 }
 
 
-func fibonacciArray(fibonacciArray: inout [Int], n:Int){// функция добавления в массив чисел Фибоначчи
+func fillFibonacciArray(_ array: inout [Int], length n:Int){// функция добавления в массив чисел Фибоначчи
     for _ in 0 ..< n {
         fibonacciArray.append(findFibonacci(index: fibonacciArray.count+1))
     }
