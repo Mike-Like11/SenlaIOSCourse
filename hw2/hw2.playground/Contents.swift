@@ -6,146 +6,295 @@ public enum Location {
     case JAPAN
     case Italy
 }
+
+
 public enum Manufacture {
     case Lada
     case Lexus
     case Ferrari
 }
+
+
 public enum TypeCar {
     case Sedan
     case Sport
     case Van
     case CrossOver
 }
-public enum State {
-    case readyToSold
+
+
+public enum CarState {
+    case prepared
     case sold
-    case broken
 }
-public class Car {
-    var country: Location
-    var manufacture: Manufacture
-    var enginePower: Int
-    var name: String
-    var state: State
-    var factory: String
-    init(country: Location, manufacture: Manufacture, name: String, enginePower:Int, factory: String){
-        self.country = country
-        self.manufacture = manufacture
-        self.enginePower = 0
-        self.name = name
-        self.enginePower = enginePower
-        self.state = .readyToSold
-        self.factory = factory
+
+
+public enum EngineState {
+    case broken
+    case wellDone
+}
+
+
+public struct Engine {
+    
+    var power:Int
+    var state:EngineState
+    
+    
+    init(power:Int) {
+        self.power = power
+        self.state = .wellDone
     }
-    func getInfo(){
-        print("Имя: \(name)")
-        print("Производитель: \(manufacture)")
-        print("Страна: \(country)")
-        print("Завод: \(factory)")
-        print("Мощность двигателя: \(enginePower)")
-        print("Состояние: \(state)")
+    
+    mutating func improvePower(newPower:Int){
+        power += newPower
     }
-    func ImproveEngine(){
-        enginePower += 1
-    }
-    func breakEngine(){
+    
+    mutating func breakPower(){
         state = .broken
     }
-    func repairEngine(){
-        state = .readyToSold
+    
+    mutating func repairPower(){
+        state = .wellDone
     }
+}
+
+
+public class Car {
+    
+    var country: Location
+    var manufacture: Manufacture
+    var engine:Engine
+    var vin: String
+    var state: CarState
+    var factory: CarFactory
+    
+    init(country: Location, manufacture: Manufacture, vin: String, enginePower:Int, factory: CarFactory){
+        self.country = country
+        self.manufacture = manufacture
+        self.engine = Engine(power: enginePower)
+        self.vin = vin
+        self.state = .prepared
+        self.factory = factory
+    }
+    
+    func ImproveEngine(){
+        
+        engine.improvePower(newPower: 1)
+    }
+    
+    func breakEngine(){
+        
+        engine.breakPower()
+    }
+    
+    func repairEngine(){
+        
+        engine.repairPower()
+    }
+    
     func sell(){
+        
         state = .sold
     }
 }
+
+
 public class SportCar: Car {
-    init(country: Location, manufacture: Manufacture, name: String, factory: String){
-        super.init(country: country, manufacture: manufacture, name: name, enginePower: 100, factory: factory)
+    
+    var nitro:Int  = 2
+    init(country: Location, manufacture: Manufacture, vin: String, factory: CarFactory){
+        super.init(country: country, manufacture: manufacture, vin: vin, enginePower: 100, factory: factory)
     }
-    override func getInfo() {
-        print("Тип: Спортивный автомобиль")
-        super.getInfo()
+    
+    func turboMode(){
+        print("TurboBoost")
     }
+    
     override func ImproveEngine() {
-        enginePower += 100
+        engine.improvePower(newPower: 100)
     }
 }
+
+
 public class SedanCar: Car {
-    init(country: Location, manufacture: Manufacture, name: String, factory: String){
-        super.init(country: country, manufacture: manufacture, name: name, enginePower: 50, factory: factory)
+    
+    init(country: Location, manufacture: Manufacture, vin: String, factory: CarFactory){
+        super.init(country: country, manufacture: manufacture, vin: vin, enginePower: 50, factory: factory)
     }
-    override func getInfo() {
-        print("Тип: Седан")
-        super.getInfo()
+    
+    func driveSimply(){
+        print("🚘")
+    }
+    
+    override func ImproveEngine() {
+        engine.improvePower(newPower: 50)
     }
 }
+
+
 public class VanCar: Car {
-    init(country: Location, manufacture: Manufacture, name: String, factory: String){
-        super.init(country: country, manufacture: manufacture, name: name, enginePower: 10, factory: factory)
+    var extraSeats = 3
+    
+    init(country: Location, manufacture: Manufacture, vin: String, factory: CarFactory){
+        super.init(country: country, manufacture: manufacture, vin: vin, enginePower: 10, factory: factory)
     }
-    override func getInfo() {
-        print("Тип: Фургон ")
-        super.getInfo()
+    
+    func partyMode(){
+        print("PArty")
     }
+    
+    override func ImproveEngine() {
+        engine.improvePower(newPower: 10)
+    }
+    
 }
+
+
 public class CrossOverCar: Car {
-    init(country: Location, manufacture: Manufacture, name: String, factory: String){
-        super.init(country: country, manufacture: manufacture, name: name, enginePower: 70,factory: factory)
+    
+    init(country: Location, manufacture: Manufacture, vin: String, factory: CarFactory){
+        super.init(country: country, manufacture: manufacture, vin: vin, enginePower: 70,factory: factory)
     }
-    override func getInfo() {
-        print("Тип: Внедорожник")
-        super.getInfo()
+    
+    func offRoadMode(){
+        print("Режим бездорожья активирован")
     }
+    
+    override func ImproveEngine() {
+        engine.improvePower(newPower: 70)
+    }
+
 }
+
+
 public class CarFactory{
-    private var cars:[Car]
     private var name:String
+    private var sedanCarParking = [SedanCar]()
+    private var sportCarParking = [SportCar]()
+    private var vanCarParking = [VanCar]()
+    private var crossOverCarParking = [CrossOverCar]()
     init(name: String){
-        cars = []
         self.name = name
     }
-    func addCar(typeCar: TypeCar, country: Location, manufacture: Manufacture, name: String){
+    func addCar(typeCar: TypeCar, country: Location, manufacture: Manufacture) -> Car {
         switch typeCar {
         case .Sedan:
-            cars.append(SedanCar(country: country, manufacture: manufacture, name: name,factory: self.name))
+           return buildSedanCar(country: country, manufacture: manufacture)
         case .Sport:
-            cars.append(SportCar(country: country, manufacture: manufacture, name: name,factory: self.name))
+           return  buildSportCar(country: country, manufacture: manufacture)
         case .Van:
-            cars.append(VanCar(country: country, manufacture: manufacture, name: name,factory: self.name))
+            return buildVanCar(country: country, manufacture: manufacture)
         case .CrossOver:
-            cars.append(CrossOverCar(country: country, manufacture: manufacture, name: name,factory: self.name))
+            return buildCrossOverCar(country: country, manufacture: manufacture)
         }
     }
-    func printAllCars(){
-        for car in cars {
-            car.getInfo()
-            print()
+    func generateVin() -> String{
+        var vin = String()
+        let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        for _ in 0...16 {
+            vin += String(Array(letters)[Int.random(in: 0..<letters.count)])
         }
+        return vin
     }
-    func sellByName(name:String){
-        if let car = cars.first(where: {$0.name == name}) {
+    private func buildSedanCar(country: Location, manufacture: Manufacture) -> SedanCar {
+        
+        let car = SedanCar(country: country, manufacture: manufacture, vin: generateVin(), factory: self)
+        sedanCarParking.append(car)
+        return car
+    }
+    private func buildSportCar(country: Location, manufacture: Manufacture) -> SportCar {
+        let car = SportCar(country: country, manufacture: manufacture, vin: generateVin(), factory: self)
+        sportCarParking.append(car)
+        return car
+    }
+    private func buildVanCar(country: Location, manufacture: Manufacture) -> VanCar {
+        let car = VanCar(country: country, manufacture: manufacture, vin: generateVin(), factory: self)
+        vanCarParking.append(car)
+        return car
+    }
+    private func buildCrossOverCar(country: Location, manufacture: Manufacture) -> CrossOverCar {
+        let car = CrossOverCar(country: country, manufacture: manufacture, vin: generateVin(), factory: self)
+        crossOverCarParking.append(car)
+        return car
+    }
+    private func findCrossOverCarByVin(vin:String) -> CrossOverCar? {
+        if let car = crossOverCarParking.first(where: {$0.vin == vin}) {
+            return car
+        }
+        return nil
+    }
+    private func findVanCar(vin:String) -> VanCar? {
+        if let car = vanCarParking.first(where: {$0.vin == vin}) {
+            return car
+        }
+        return nil
+    }
+    private func findSportCar(vin:String) -> SportCar? {
+        if let car = sportCarParking.first(where: {$0.vin == vin}) {
+            return car
+        }
+        return nil
+    }
+    private func findSedanCar(vin:String) -> SedanCar? {
+        if let car = sedanCarParking.first(where: {$0.vin == vin}) {
+            return car
+        }
+        return nil
+    }
+    func sellByVin(vin:String){
+        
+        if let car = findCrossOverCarByVin(vin: vin) {
+            car.sell()
+        }
+        if let car = findVanCar(vin: vin) {
+            car.sell()
+        }
+        if let car = findSportCar(vin: vin) {
+            car.sell()
+        }
+        if let car = findSedanCar(vin: vin) {
             car.sell()
         }
     }
-    func breakByName(name:String){
-        if let car = cars.first(where: {$0.name == name}) {
+    func breakByName(vin:String){
+
+        if let car = findCrossOverCarByVin(vin: vin) {
             car.breakEngine()
         }
+        if let car = findVanCar(vin: vin) {
+            car.breakEngine()
+        }
+        if let car = findSportCar(vin: vin) {
+            car.breakEngine()
+        }
+        if let car = findSedanCar(vin: vin) {
+            car.breakEngine()
+        }
+
     }
-    func repairByName(name:String){
-        if let car = cars.first(where: {$0.name == name}) {
+    func repairByName(vin:String){
+      
+        if let car = findCrossOverCarByVin(vin: vin) {
             car.repairEngine()
         }
+        if let car = findVanCar(vin: vin) {
+            car.repairEngine()
+        }
+        if let car = findSportCar(vin: vin) {
+            car.repairEngine()
+        }
+        if let car = findSedanCar(vin: vin) {
+            car.repairEngine()
+        }
+        
     }
 }
+
+
 var carFactory = CarFactory(name: "Завод Senla")
-carFactory.addCar(typeCar: .Sport, country: .Italy, manufacture: .Ferrari, name: "The best")
-carFactory.addCar(typeCar: .Sedan, country: .JAPAN, manufacture: .Lexus, name: "Nice One")
-carFactory.printAllCars()
-carFactory.sellByName(name: "The best")
-carFactory.printAllCars()
-carFactory.breakByName(name: "Nice One")
-carFactory.printAllCars()
-carFactory.repairByName(name: "Nice One")
-carFactory.printAllCars()
+var car = carFactory.addCar(typeCar: .Sport, country: .Italy, manufacture: .Ferrari)
+carFactory.breakByName(vin: car.vin)
+carFactory.repairByName(vin: car.vin)
+carFactory.sellByVin(vin: car.vin)
+
