@@ -328,7 +328,7 @@ public struct CrossOverCar: Car, Roadlessable {
 }
 
 
-public protocol Diller {
+public protocol Dillerable {
     
     var sedanCarParking:[SedanCar]{get set}
     
@@ -336,23 +336,21 @@ public protocol Diller {
     
     var vanCarParking:[VanCar] {get set}
     
-    func createParking()
-    
     var crossOverCarParking:[CrossOverCar]{get set}
     
-    func addCar(car:SedanCar)
+    mutating func addCar(car:SedanCar)
     
-    func addCar(car:SportCar)
+    mutating func addCar(car:SportCar)
     
-    func addCar(car:VanCar)
+    mutating func addCar(car:VanCar)
     
-    func addCar(car:CrossOverCar)
+    mutating func addCar(car:CrossOverCar)
     
-    func sellByVin(vin:String)
+    mutating  func sellByVin(vin:String)
 }
 
 
-public extension Diller {
+public extension Dillerable {
     
     mutating func sellByVin(vin:String){//Static(Direct) Dispatch
         if var car = sportCarParking.first(where: {$0.vin == vin}) {
@@ -389,21 +387,28 @@ public extension Diller {
         crossOverCarParking.append(car)
     }
     
-    mutating func createParking(){//Static(Direct) Dispatch
-        crossOverCarParking = []
-        vanCarParking = []
-        sportCarParking = []
-        sedanCarParking = []
-    }
 }
 
+public class Diller:Dillerable{
+    
+    public var sedanCarParking: [SedanCar] = []
+    
+    public var sportCarParking: [SportCar] = []
+    
+    public var vanCarParking: [VanCar] = []
+    
+    public var crossOverCarParking: [CrossOverCar] = []
+    
+    init(){
+    }
+}
 
 public class CarFactory{
     private var name:String
     var diller: Diller?
-    init(name: String){
+    init(name: String, diller:Diller){
         self.name = name
-        diller?.createParking()
+        self.diller = diller
     }
     
     func buildCar(typeCar: TypeCar, country: Location, manufacture: Manufacture) {
@@ -454,8 +459,6 @@ public class CarFactory{
 
 }
 
-
-var cf = CarFactory(name: "dsadsa")
+var d = Diller()
+var cf = CarFactory(name: "dsadsa",diller: d)
 cf.buildCar(typeCar: .Sedan, country: .JAPAN, manufacture: .Lexus)
-
-
