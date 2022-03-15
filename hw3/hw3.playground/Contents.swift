@@ -14,7 +14,7 @@ public enum Manufacture {
 }
 
 
-public enum TypeCar {
+public enum CarType {
     case Sedan
     case Sport
     case Van
@@ -328,6 +328,18 @@ public struct CrossOverCar: Car, Roadlessable {
 }
 
 
+public protocol FabricDelegate: AnyObject {
+    
+    func addCar(car:SedanCar)
+    
+    func addCar(car:SportCar)
+    
+    func addCar(car:VanCar)
+    
+    func addCar(car:CrossOverCar)
+}
+
+
 public protocol Dillerable {
     
     var sedanCarParking:[SedanCar]{get set}
@@ -337,15 +349,7 @@ public protocol Dillerable {
     var vanCarParking:[VanCar] {get set}
     
     var crossOverCarParking:[CrossOverCar]{get set}
-    
-    mutating func addCar(car:SedanCar)
-    
-    mutating func addCar(car:SportCar)
-    
-    mutating func addCar(car:VanCar)
-    
-    mutating func addCar(car:CrossOverCar)
-    
+        
     mutating  func sellByVin(vin:String)
 }
 
@@ -371,25 +375,27 @@ public extension Dillerable {
         }
     }
     
-    mutating func addCar(car:SedanCar){//Static(Direct) Dispatch
-        sedanCarParking.append(car)
-    }
+
+}
+
+
+public class Diller:Dillerable, FabricDelegate{
     
-    mutating func addCar(car:SportCar){//Static(Direct) Dispatch
+    public func addCar(car: SportCar) {
         sportCarParking.append(car)
     }
     
-    mutating func addCar(car: VanCar){//Static(Direct) Dispatch
+    public func addCar(car: SedanCar) {
+        sedanCarParking.append(car)
+    }
+    
+    public func addCar(car: VanCar) {
         vanCarParking.append(car)
     }
     
-    mutating func addCar(car:CrossOverCar){//Static(Direct) Dispatch
+    public func addCar(car: CrossOverCar) {
         crossOverCarParking.append(car)
     }
-    
-}
-
-public class Diller:Dillerable{
     
     public var sedanCarParking: [SedanCar] = []
     
@@ -400,38 +406,39 @@ public class Diller:Dillerable{
     public var crossOverCarParking: [CrossOverCar] = []
     
     init(){
+        
     }
 }
 
+
 public class CarFactory{
     private var name:String
-    var diller: Diller?
-    init(name: String, diller:Diller){
+    weak var delegate: FabricDelegate?
+    init(name: String, delegate: FabricDelegate? = nil){
         self.name = name
-        self.diller = diller
+        self.delegate = delegate
     }
     
-    func buildCar(typeCar: TypeCar, country: Location, manufacture: Manufacture) {
+    func buildCar(typeCar: CarType, country: Location, manufacture: Manufacture) {
         switch typeCar {
         case .Sedan:
-            diller?.addCar(car: buildSedanCar(country: country, manufacture: manufacture, color: UIColor.blue))
+            delegate?.addCar(car: buildSedanCar(country: country, manufacture: manufacture, color: UIColor.blue))
         case .Sport:
-            diller?.addCar(car: buildSportCar(country: country, manufacture: manufacture, color: UIColor.blue))
+            delegate?.addCar(car: buildSportCar(country: country, manufacture: manufacture, color: UIColor.blue))
         case .Van:
-            diller?.addCar(car: buildVanCar(country: country, manufacture: manufacture, color: UIColor.blue))
+            delegate?.addCar(car: buildVanCar(country: country, manufacture: manufacture, color: UIColor.blue))
         case .CrossOver:
-            diller?.addCar(car: buildCrossOverCar(country: country, manufacture: manufacture, color: UIColor.blue))
+            delegate?.addCar(car: buildCrossOverCar(country: country, manufacture: manufacture, color: UIColor.blue))
         }
     }
     
-    func sellByVin(vin:String){
-        diller?.sellByVin(vin: vin)
-    }
+
     func generateVin() -> String{
         var vin = String()
-        let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let letters:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         for _ in 0...16 {
-            vin += String(Array(letters)[Int.random(in: 0..<letters.count)])
+            let i = letters.index(letters.startIndex, offsetBy: Int.random(in: 0..<letters.count))
+            vin.append(letters[i])
         }
         return vin
     }
@@ -459,6 +466,8 @@ public class CarFactory{
 
 }
 
-var d = Diller()
-var cf = CarFactory(name: "dsadsa",diller: d)
-cf.buildCar(typeCar: .Sedan, country: .JAPAN, manufacture: .Lexus)
+var diller = Diller()
+var carFactory = CarFactory(name: "dsadsa")
+carFactory.delegate = diller
+carFactory.buildCar(typeCar: .Sedan, country: .JAPAN, manufacture: .Lexus)
+diller.sellByVin(vin: "41N03LTM3C92HX98W")
