@@ -29,11 +29,16 @@ class SettingsViewController: UIViewController {
         label.text = "Режим ничьи"
         return label
     }()
-
+    
     private lazy var langSegmentedControl:UISegmentedControl = {
         let segmentedControl = UISegmentedControl(items: ["RUS", "EN"])
         if let delegate = delegate {
-            segmentedControl.selectedSegmentIndex = delegate.lang
+            switch delegate.lang{
+            case .rus:
+                segmentedControl.selectedSegmentIndex = 0
+            case .en:
+                segmentedControl.selectedSegmentIndex = 1
+            }
         }
         else{
             segmentedControl.selectedSegmentIndex = 0
@@ -70,7 +75,7 @@ class SettingsViewController: UIViewController {
         modeSwitch.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
         
     }
-
+    
     
 }
 
@@ -91,7 +96,14 @@ extension SettingsViewController{
     }
     
     @objc func segmentedValueChanged(_ sender:UISegmentedControl!) {
-        delegate?.changeLang(lang: sender.selectedSegmentIndex)
+        switch sender.selectedSegmentIndex{
+        case 0:
+            delegate?.changeLang(lang: .rus)
+        case 1:
+            delegate?.changeLang(lang: .en)
+        default:
+            delegate?.changeLang(lang: .rus)
+        }
     }
     @objc func switchStateDidChange(_ sender:UISwitch!){
         delegate?.changePlayMode(mode: sender.isOn)

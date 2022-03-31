@@ -10,15 +10,33 @@ import UIKit
 protocol RockPaperScissorsable: AnyObject {
     
     func changePlayMode(mode:Bool)
-    func changeLang(lang:Int)
+    func changeLang(lang:Lang)
+    func changeResult(result:Result)
     var playMode:Bool { get set }
-    var lang:Int { get set }
+    var lang:Lang {get set}
+    var result:Result {get set}
 }
 
+
+enum Result{
+    case process
+    case victory
+    case draw
+    case lose
+}
+
+
+enum Lang{
+    case rus
+    case en
+}
+
+
 class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
+    
     var playMode: Bool = false
-    var lang: Int = 0
-    var result:Int = 0
+    var lang: Lang = .rus
+    var result:Result = .process
     var resultOptions:[(String,String)] = [("",""),("Поражение","Lose"),("Ничья","Draw"),("Победа","Victory")]
     
     private lazy var yourChoosenImage:UIImageView = {
@@ -126,6 +144,8 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
     
     
 }
+
+
 extension RockPaperScissorsViewController{
     
     func setupView() {
@@ -193,14 +213,15 @@ extension RockPaperScissorsViewController{
                            animations: {
                 self.resultLabel.isHidden = false
                 if(randomImageNumber - sender.tag == 1 || (sender.tag == 2 && randomImageNumber == 0)){
-                    self.result = 3
+                    self.result = .victory
                 }
                 else{
                     if(randomImageNumber == sender.tag){
-                        self.result = 2
+                        self.result = .draw
                     }
+                    
                     else {
-                        self.result = 1
+                        self.result = .lose
                     }
                 }
                 self.setupLangResult()
@@ -216,41 +237,63 @@ extension RockPaperScissorsViewController{
         }
         resultLabel.isHidden = true
         playButton.isHidden  = true
+        result = .process
         if let image = UIImage(named: "Rock"){
             yourChoosenImage.image = image.withRenderingMode(.alwaysOriginal)
             opponentChoosenImage.image = image.withRenderingMode(.alwaysOriginal)
         }
-        self.optionsStackView.isHidden = false
-        self.playButton.isHidden  = true
+        optionsStackView.isHidden = false
+        playButton.isHidden  = true
     }
     
     func setupLangButton(){
+        
         switch(lang){
-        case 0:
+        case .rus:
             playButton.setTitle("Играть снова", for: .normal)
-        case 1:
+        case .en:
             playButton.setTitle("Play Again", for: .normal)
-        default:
-            playButton.setTitle("Играть снова", for: .normal)
         }
     }
     
     func setupLangResult(){
-        switch(lang){
-        case 0:
-            resultLabel.text = resultOptions[result].0
-        case 1:
-            resultLabel.text = resultOptions[result].1
-        default:
-            resultLabel.text = ""
+        switch result{
+        case .process:
+            playButton.isHidden = true
+        case .victory:
+            switch(lang){
+            case .rus:
+                resultLabel.text = "Победа 😊"
+            case .en:
+                resultLabel.text = "Victory 😊"
+            }
+        case .lose:
+            switch(lang){
+            case .rus:
+                resultLabel.text = "Проигрыш 😔"
+            case .en:
+                resultLabel.text = "Lose 😔"
+            }
+        case .draw:
+            switch(lang){
+            case .rus:
+                resultLabel.text = "Ничья 😐"
+            case .en:
+                resultLabel.text = "Draw 😐"
+            }
         }
     }
-    func changePlayMode(mode: Bool) {
-        playMode = mode
-    }
-    func changeLang(lang: Int) {
+    
+    func changeLang(lang: Lang) {
         self.lang = lang
         setupLangButton()
         setupLangResult()
+    }
+    
+    func changeResult(result: Result) {
+        self.result = result
+    }
+    func changePlayMode(mode: Bool) {
+        playMode = mode
     }
 }
