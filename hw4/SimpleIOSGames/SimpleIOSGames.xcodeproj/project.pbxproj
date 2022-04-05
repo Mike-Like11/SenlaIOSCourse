@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */; };
 		27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */; };
-		27E0EDED27F4D96F00FA35C8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDEC27F4D96F00FA35C8 /* ViewController.swift */; };
 		27E0EDF227F4D96F00FA35C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27E0EDF127F4D96F00FA35C8 /* Assets.xcassets */; };
 		27E0EDF527F4D96F00FA35C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27E0EDF327F4D96F00FA35C8 /* LaunchScreen.storyboard */; };
 		27E0EDFD27F4DA4900FA35C8 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDFC27F4DA4900FA35C8 /* TabBarController.swift */; };
@@ -22,7 +21,6 @@
 		27E0EDE527F4D96F00FA35C8 /* SimpleIOSGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleIOSGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		27E0EDEC27F4D96F00FA35C8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		27E0EDF127F4D96F00FA35C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27E0EDF427F4D96F00FA35C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		27E0EDF627F4D96F00FA35C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,7 +64,6 @@
 				27E0EDFC27F4DA4900FA35C8 /* TabBarController.swift */,
 				27E0EDFE27F4DA9600FA35C8 /* RockPaperScissorsViewController.swift */,
 				27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */,
-				27E0EDEC27F4D96F00FA35C8 /* ViewController.swift */,
 				27E0EDF127F4D96F00FA35C8 /* Assets.xcassets */,
 				27E0EDF327F4D96F00FA35C8 /* LaunchScreen.storyboard */,
 				27E0EDF627F4D96F00FA35C8 /* Info.plist */,
@@ -146,7 +143,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27E0EDED27F4D96F00FA35C8 /* ViewController.swift in Sources */,
 				27E0EE0127F4DBE300FA35C8 /* DiceGameViewController.swift in Sources */,
 				27E0EE0327F4EF6000FA35C8 /* SettingsViewController.swift in Sources */,
 				27E0EDFF27F4DA9600FA35C8 /* RockPaperScissorsViewController.swift in Sources */,

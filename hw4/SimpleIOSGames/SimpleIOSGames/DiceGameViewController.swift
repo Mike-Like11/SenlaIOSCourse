@@ -21,17 +21,16 @@ enum DiceGameStatus{
 
 class DiceGameViewController: UIViewController {
     
-    private lazy var verticalStackView:UIStackView = {
+    private var verticalStackView:UIStackView = {
         var verticalStackView = UIStackView()
         verticalStackView.axis = .horizontal
         verticalStackView.alignment = .fill
         verticalStackView.distribution = .fillEqually
         verticalStackView.spacing = 10
-        verticalStackView.spacing = UIStackView.spacingUseSystem
         return verticalStackView
     }()
     
-    private lazy var optionsStackView:UIStackView = {
+    private var oddStackView:UIStackView = {
         var horizontalStackView = UIStackView()
         horizontalStackView.axis = .vertical
         horizontalStackView.alignment = .fill
@@ -40,20 +39,49 @@ class DiceGameViewController: UIViewController {
         return horizontalStackView
     }()
     
-    private lazy var buttonOptions:[UIImageView] = {
-        
-        var imagesOptions:[UIImageView] = []
-        for i in 0...5 {
-            let imageView = UIImageView()
-            imageView.tag = i
-            if let image = UIImage(systemName: "die.face.\(i+1)"){
-                imageView.image = image.withRenderingMode(.alwaysOriginal).withTintColor(.black)
-                imageView.contentMode = .scaleAspectFit
-            }
-            imagesOptions.append(imageView)
-        }
-        return imagesOptions
+    private var firstButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 1
+        imageView.image = UIImage(systemName: "die.face.1")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
+    private var secondButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 2
+        imageView.image = UIImage(systemName: "die.face.2")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private var thirdButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 3
+        imageView.image = UIImage(systemName: "die.face.3")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private var fourthButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 4
+        imageView.image = UIImage(systemName: "die.face.4")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private var fifthButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 5
+        imageView.image = UIImage(systemName: "die.face.5")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private var sixthButtonOption:UIImageView = {
+        let imageView = UIImageView()
+        imageView.tag = 6
+        imageView.image = UIImage(systemName: "die.face.6")?.withRenderingMode(.alwaysOriginal).withTintColor(.black)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
     
     private lazy var playButton: UIButton = {
         let button = UIButton()
@@ -62,12 +90,12 @@ class DiceGameViewController: UIViewController {
         button.setTitle("Бросок", for: .normal)
         button.tintColor = .systemYellow
         button.addAction(UIAction() { [weak self] _ in
-            self?.Roll()
+            self?.btnRollLogic()
         }, for: .touchUpInside)
         return button
     }()
     
-    private lazy var chosenStackView2:UIStackView = {
+    private var evenStackView:UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -83,54 +111,83 @@ class DiceGameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        view.backgroundColor = .systemYellow
+        addSubviews()
+        makeConstraints()
     }
 }
 
 
-extension DiceGameViewController{
-    func Roll(){
+private extension DiceGameViewController{
+    
+    func makeRandomRoll(){
+        let randomImageNumber = Int.random(in: 1..<7)
+        firstButtonOption.isHidden = true
+        secondButtonOption.isHidden = true
+        thirdButtonOption.isHidden = true
+        fourthButtonOption.isHidden = true
+        fifthButtonOption.isHidden = true
+        sixthButtonOption.isHidden = true
+        switch randomImageNumber{
+        case 1: firstButtonOption.isHidden = false
+        case 2: secondButtonOption.isHidden = false
+        case 3: thirdButtonOption.isHidden = false
+        case 4: fourthButtonOption.isHidden = false
+        case 5: fifthButtonOption.isHidden = false
+        case 6: sixthButtonOption.isHidden = false
+        default:
+            break
+        }
+        if(randomImageNumber % 2 == 0){
+            oddStackView.isHidden = true
+        }
+        else{
+            evenStackView.isHidden = true
+        }
+        playButton.setTitle("Повтор",for: .normal)
+    }
+    func prepareToRoll(){
+        firstButtonOption.isHidden = false
+        secondButtonOption.isHidden = false
+        thirdButtonOption.isHidden = false
+        fourthButtonOption.isHidden = false
+        fifthButtonOption.isHidden = false
+        sixthButtonOption.isHidden = false
+        oddStackView.isHidden = false
+        evenStackView.isHidden = false
+        playButton.setTitle("Бросок",for: .normal)
+    }
+    func btnRollLogic(){
         switch gameStatus {
         case .prepared:
-            let randomImageNumber = Int.random(in: 0..<6)
-            buttonOptions.forEach { image in
-                if !(image.tag == randomImageNumber){
-                    image.isHidden = true
-                }
-            }
-            if(randomImageNumber % 2 == 1){
-                optionsStackView.isHidden = true
-            }
-            else{
-                chosenStackView2.isHidden = true
-            }
-            playButton.setTitle("Повтор",for: .normal)
+            makeRandomRoll()
         case .rolled:
-            buttonOptions.forEach { image in
-                image.isHidden = false
-            }
-            optionsStackView.isHidden = false
-            chosenStackView2.isHidden = false
-            playButton.setTitle("Бросок",for: .normal)
+            prepareToRoll()
         }
         gameStatus = gameStatus.nextStatus
         
     }
-    func setupView(){
-        view.backgroundColor = .systemYellow
+    func  addSubviews(){
         view.addSubview(verticalStackView)
         view.addSubview(playButton)
-        verticalStackView.frame = self.view.bounds.insetBy(dx: 20, dy: 200)
-        verticalStackView.addArrangedSubview(optionsStackView)
-        verticalStackView.addArrangedSubview(chosenStackView2)
-        for i in 0...5{
-            if(i % 2==0){
-                optionsStackView.addArrangedSubview(buttonOptions[i])
-            }
-            else{
-                chosenStackView2.addArrangedSubview(buttonOptions[i])
-            }
-        }
+        verticalStackView.addArrangedSubview(oddStackView)
+        verticalStackView.addArrangedSubview(evenStackView)
+        oddStackView.addArrangedSubview(firstButtonOption)
+        evenStackView.addArrangedSubview(secondButtonOption)
+        oddStackView.addArrangedSubview(thirdButtonOption)
+        evenStackView.addArrangedSubview(fourthButtonOption)
+        oddStackView.addArrangedSubview(fifthButtonOption)
+        evenStackView.addArrangedSubview(sixthButtonOption)
+    }
+    func  makeConstraints(){
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            verticalStackView.topAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.topAnchor,constant: 20),
+            verticalStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
+            verticalStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -20),
+            verticalStackView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor,constant: -200),
+        ])
     }
 }
 
