@@ -7,16 +7,6 @@
 
 import UIKit
 
-protocol RockPaperScissorsable: AnyObject {
-    
-    func changePlayMode(mode:Bool)
-    func changeLang(lang:Lang)
-    func changeResult(result:Result)
-    var playMode:Bool { get set }
-    var lang:Lang {get set}
-    var result:Result {get set}
-}
-
 
 enum Result{
     case process
@@ -26,33 +16,67 @@ enum Result{
 }
 
 
-enum Lang{
-    case rus
-    case en
+protocol TranslatedResults{
+    func getTranslatedResults(result:Result)->String
+    func getTranslatedButtonText() -> String
 }
 
 
-class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
+struct russianResults:  TranslatedResults{
     
-    var playMode: Bool = false
+    func getTranslatedResults(result:Result) -> String{
+        switch result {
+        case .process:
+            return ""
+        case .victory:
+            return "Победа 😊"
+        case .draw:
+            return "Ничья 😐"
+        case .lose:
+            return "Проигрыш 😔"
+        }
+    }
+    func getTranslatedButtonText() -> String{
+        return "Играть снова"
+    }
+}
+
+
+struct englishResults:  TranslatedResults{
+    
+    func getTranslatedResults(result:Result) -> String{
+        switch result {
+        case .process:
+            return ""
+        case .victory:
+            return "Victory 😊"
+        case .draw:
+            return "Draw 😐"
+        case .lose:
+            return "Lose 😔"
+        }
+    }
+    func getTranslatedButtonText() -> String{
+        return "Play Again"
+    }
+}
+
+class RockPaperScissorsViewController: UIViewController {
+
+    var playMode: PlayMode = .drawDisabled
     var lang: Lang = .rus
     var result:Result = .process
-    var resultOptions:[(String,String)] = [("",""),("Поражение","Lose"),("Ничья","Draw"),("Победа","Victory")]
-    
-    private lazy var yourChoosenImage:UIImageView = {
+    var languageResults:TranslatedResults = russianResults()
+    private var yourChoosenImage:UIImageView = {
         let imageView = UIImageView()
-        if let image = UIImage(named: "Rock"){
-            imageView.image = image.withRenderingMode(.alwaysOriginal)
-        }
+        imageView.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private lazy var opponentChoosenImage:UIImageView = {
+    private var opponentChoosenImage:UIImageView = {
         let imageView = UIImageView()
-        if let image = UIImage(named: "Rock"){
-            imageView.image = image.withRenderingMode(.alwaysOriginal)
-        }
+        imageView.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -69,33 +93,37 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
         return button
     }()
     
-    private lazy var buttonOptions:[UIButton] = {
-        
-        var buttonOptions:[UIButton] = []
-        if let image = UIImage(named: "Rock"){
-            imageOptions.append(image.withRenderingMode(.alwaysOriginal))
-        }
-        if let image = UIImage(named: "Scissors"){
-            imageOptions.append(image.withRenderingMode(.alwaysOriginal))
-        }
-        if let image = UIImage(named: "Paper"){
-            imageOptions.append(image.withRenderingMode(.alwaysOriginal))
-        }
-        for i in 0...2 {
-            let button = UIButton(type: .roundedRect)
-            button.contentMode = .scaleAspectFit
-            button.setImage(imageOptions[i], for: .normal)
-            button.imageView?.contentMode = .scaleAspectFit
-            button.tag = i
-            button.addTarget(self, action: #selector(RockPaperScissorsViewController.makeMove(_:)), for: .touchUpInside)
-            buttonOptions.append(button)
-        }
-        return buttonOptions
+    
+    private var rockButtonOption:UIButton = {
+        let button = UIButton(type: .roundedRect)
+        button.contentMode = .scaleAspectFit
+        button.setImage(UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tag = 0
+        button.addTarget(self, action: #selector(RockPaperScissorsViewController.makeMove(_:)), for: .touchUpInside)
+        return button
     }()
+    private var scissorsButtonOption:UIButton = {
+        let button = UIButton(type: .roundedRect)
+        button.contentMode = .scaleAspectFit
+        button.setImage(UIImage(named: "Scissors")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tag = 1
+        button.addTarget(self, action: #selector(RockPaperScissorsViewController.makeMove(_:)), for: .touchUpInside)
+        return button
+    }()
+    private var paperButtonOption:UIButton = {
+        let button = UIButton(type: .roundedRect)
+        button.contentMode = .scaleAspectFit
+        button.setImage(UIImage(named: "Paper")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tag = 2
+        button.addTarget(self, action: #selector(RockPaperScissorsViewController.makeMove(_:)), for: .touchUpInside)
+        return button
+    }()
+    private var imageSrcOptions:[String] = ["Rock", "Scissors", "Paper"]
     
-    private lazy var imageOptions:[UIImage] = []
-    
-    private lazy var verticalStackView:UIStackView = {
+    private var verticalStackView:UIStackView = {
         var verticalStackView = UIStackView()
         verticalStackView.axis = .vertical
         verticalStackView.alignment = .center
@@ -105,7 +133,7 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
         return verticalStackView
     }()
     
-    private lazy var optionsStackView:UIStackView = {
+    private var optionsStackView:UIStackView = {
         var horizontalStackView = UIStackView()
         horizontalStackView.axis = .horizontal
         horizontalStackView.alignment = .center
@@ -114,7 +142,7 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
         return horizontalStackView
     }()
     
-    private lazy var chosenStackView2:UIStackView = {
+    private var chosenStackView:UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -123,7 +151,7 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
         return stackView
     }()
     
-    private lazy var resultLabel: UILabel = {
+    private var resultLabel: UILabel = {
         let resultLabel = UILabel()
         resultLabel.font = .systemFont(ofSize: 32)
         resultLabel.textColor = .systemIndigo
@@ -135,6 +163,7 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
         super.viewDidLoad()
         setupNavigationBarIfPossible()
         setupView()
+        makeConstraints()
     }
     
     override func viewDidLayoutSubviews() {
@@ -145,24 +174,66 @@ class RockPaperScissorsViewController: UIViewController,RockPaperScissorsable {
     
 }
 
+extension RockPaperScissorsViewController:SettingsViewControllerDelegate{
+    
+    func changePlayMode(mode: Bool) {
+        playMode = mode ? .drawEnabled : .drawDisabled
+    }
+    
+    func changeLang(lang: Lang) {
+        self.lang = lang
+        switch lang {
+        case .rus:
+            languageResults = russianResults()
+        case .en:
+            languageResults = englishResults()
+        }
+        setupLangButton()
+        setupLangResult()
+    }
+    
+    func getLang() -> Lang {
+        return lang
+    }
+    
+    func getPlayMode() -> Bool {
+        switch playMode{
+            
+        case .drawEnabled:
+            return true
+        case .drawDisabled:
+            return false
+        }
+    }
+}
 
-extension RockPaperScissorsViewController{
+private extension RockPaperScissorsViewController{
     
     func setupView() {
         view.backgroundColor = .systemYellow
         view.addSubview(verticalStackView)
         verticalStackView.addArrangedSubview(resultLabel)
-        verticalStackView.frame = self.view.bounds.insetBy(dx: 20, dy: 200)
-        chosenStackView2.addArrangedSubview(yourChoosenImage)
-        chosenStackView2.addArrangedSubview(opponentChoosenImage)
-        verticalStackView.addArrangedSubview(chosenStackView2)
+        chosenStackView.addArrangedSubview(yourChoosenImage)
+        chosenStackView.addArrangedSubview(opponentChoosenImage)
+        verticalStackView.addArrangedSubview(chosenStackView)
         verticalStackView.addArrangedSubview(optionsStackView)
-        buttonOptions.forEach {button in
-            optionsStackView.addArrangedSubview(button)
-        }
+        optionsStackView.addArrangedSubview(rockButtonOption)
+        optionsStackView.addArrangedSubview(scissorsButtonOption)
+        optionsStackView.addArrangedSubview(paperButtonOption)
         setupLangResult()
         setupLangButton()
         view.addSubview(playButton)
+    }
+    
+    func  makeConstraints(){
+        verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            verticalStackView.topAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.topAnchor,constant: 20),
+            verticalStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor,constant: 20),
+            verticalStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor,constant: -20),
+            verticalStackView.bottomAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.bottomAnchor,constant: -200),
+        ])
     }
     
     func setupNavigationBarIfPossible() {
@@ -185,115 +256,69 @@ extension RockPaperScissorsViewController{
         self.navigationController?.pushViewController(settingViewController, animated: true)
     }
     
-    @objc func makeMove(_ sender:UIButton!){
+    @objc func makeMove(_ sender:UIButton){
         var randomImageNumber:Int
-        if(!playMode){
-            randomImageNumber = Int.random(in: sender.tag+1..<sender.tag+3) % 3
-        }
-        else{
+        switch playMode{
+        case .drawEnabled:
             randomImageNumber = Int.random(in: 0..<3)
+        case .drawDisabled:
+            randomImageNumber = Int.random(in: sender.tag+1..<sender.tag+3) % 3
         }
         self.optionsStackView.isHidden = true
         UIView .transition(with:  (self.opponentChoosenImage), duration: 1, options: .transitionFlipFromLeft,
                            animations: { [self] in
-            self.opponentChoosenImage.image = self.imageOptions[randomImageNumber]
+            self.opponentChoosenImage.image = UIImage(named: self.imageSrcOptions[randomImageNumber])?.withRenderingMode(.alwaysOriginal)
         }, completion: nil)
         UIView .transition(with:  (self.yourChoosenImage), duration: 1, options: .transitionFlipFromRight,
                            animations: {
             self.yourChoosenImage.image = sender.imageView?.image
         }, completion: nil)
         self.yourChoosenImage.image = sender.imageView?.image
-        self.buttonOptions.forEach { button in
-            button.isEnabled = false
+        if(randomImageNumber - sender.tag == 1 || (sender.tag == 2 && randomImageNumber == 0)){
+            self.result = .victory
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            UIView.animate(withDuration: 0.2,
-                           delay: 0,
-                           options: .curveLinear,
-                           animations: {
-                self.resultLabel.isHidden = false
-                if(randomImageNumber - sender.tag == 1 || (sender.tag == 2 && randomImageNumber == 0)){
-                    self.result = .victory
-                }
-                else{
-                    if(randomImageNumber == sender.tag){
-                        self.result = .draw
-                    }
-                    
-                    else {
-                        self.result = .lose
-                    }
-                }
-                self.setupLangResult()
-                self.playButton.isHidden  = false
-            })
+        else{
+            if(randomImageNumber == sender.tag){
+                self.result = .draw
+            }
+            
+            else {
+                self.result = .lose
+            }
         }
+        UIView.animate(withDuration: 0.2,
+                       delay: 1,
+                       options: .curveLinear,
+                       animations: {
+            self.resultLabel.isHidden = false
+            
+            self.playButton.isHidden  = false
+        })
+        self.setupLangResult()
         
     }
     
     func gameOn(){
-        buttonOptions.forEach { button in
-            button.isEnabled = true
-        }
         resultLabel.isHidden = true
         playButton.isHidden  = true
         result = .process
-        if let image = UIImage(named: "Rock"){
-            yourChoosenImage.image = image.withRenderingMode(.alwaysOriginal)
-            opponentChoosenImage.image = image.withRenderingMode(.alwaysOriginal)
-        }
+        yourChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
+        opponentChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
         optionsStackView.isHidden = false
         playButton.isHidden  = true
     }
     
     func setupLangButton(){
-        
-        switch(lang){
-        case .rus:
-            playButton.setTitle("Играть снова", for: .normal)
-        case .en:
-            playButton.setTitle("Play Again", for: .normal)
-        }
+        playButton.setTitle(languageResults.getTranslatedButtonText(), for: .normal)
     }
     
     func setupLangResult(){
-        switch result{
-        case .process:
-            playButton.isHidden = true
-        case .victory:
-            switch(lang){
-            case .rus:
-                resultLabel.text = "Победа 😊"
-            case .en:
-                resultLabel.text = "Victory 😊"
-            }
-        case .lose:
-            switch(lang){
-            case .rus:
-                resultLabel.text = "Проигрыш 😔"
-            case .en:
-                resultLabel.text = "Lose 😔"
-            }
-        case .draw:
-            switch(lang){
-            case .rus:
-                resultLabel.text = "Ничья 😐"
-            case .en:
-                resultLabel.text = "Draw 😐"
-            }
-        }
+        resultLabel.text = languageResults.getTranslatedResults(result: result)
     }
     
-    func changeLang(lang: Lang) {
-        self.lang = lang
-        setupLangButton()
-        setupLangResult()
-    }
     
     func changeResult(result: Result) {
         self.result = result
     }
-    func changePlayMode(mode: Bool) {
-        playMode = mode
-    }
+    
 }

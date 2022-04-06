@@ -7,47 +7,47 @@
 
 import UIKit
 
+enum Lang : Int{
+    case rus
+    case en
+}
+
+enum PlayMode{
+    case drawEnabled
+    case drawDisabled
+}
+
+protocol SettingsViewControllerDelegate: AnyObject {
+    
+    func changePlayMode(mode:Bool)
+    func changeLang(lang:Lang)
+    func getLang() -> Lang
+    func getPlayMode() -> Bool
+}
+
 class SettingsViewController: UIViewController {
     
-    weak var delegate: RockPaperScissorsable?
-    
+    weak var delegate: SettingsViewControllerDelegate?
     private lazy var modeSwitch:UISwitch = {
-        
         let mySwitch = UISwitch()
-        if let delegate = delegate {
-            mySwitch.setOn(delegate.playMode, animated: true)
-        }
-        else{
-            mySwitch.setOn(false, animated: true)
-        }
-        mySwitch.addTarget(self, action: #selector(switchStateDidChange), for: .valueChanged)
+        mySwitch.addAction(UIAction() { [weak self] _ in
+            self?.switchStateDidChange()
+        }, for: .valueChanged)
         return mySwitch
     }()
-    
-    private lazy var modeLabel:UILabel = {
+    private var modeLabel:UILabel = {
         let label = UILabel()
         label.text = "Режим ничьи"
         return label
     }()
-    
     private lazy var langSegmentedControl:UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["RUS", "EN"])
-        if let delegate = delegate {
-            switch delegate.lang{
-            case .rus:
-                segmentedControl.selectedSegmentIndex = 0
-            case .en:
-                segmentedControl.selectedSegmentIndex = 1
-            }
-        }
-        else{
-            segmentedControl.selectedSegmentIndex = 0
-        }
-        segmentedControl.addTarget(self, action: #selector(segmentedValueChanged), for: .valueChanged)
+        let segmentedControl = UISegmentedControl()
+        segmentedControl.addAction(UIAction() { [weak self] _ in
+            self?.segmentedValueChanged()
+        }, for: .valueChanged)
         return segmentedControl
     }()
-    
-    private lazy var langLabel:UILabel = {
+    private var langLabel:UILabel = {
         let label = UILabel()
         label.text = "Язык"
         return label
@@ -56,23 +56,14 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        makeConstraints()
+        setupLangSegmentedControl()
+        setupModeSwitch()
         setupNavigationBarIfPossible()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        langLabel.translatesAutoresizingMaskIntoConstraints = false
-        langLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
-        langLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        langSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        langSegmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
-        langSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
-        modeLabel.translatesAutoresizingMaskIntoConstraints = false
-        modeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-        modeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
-        modeSwitch.translatesAutoresizingMaskIntoConstraints = false
-        modeSwitch.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
-        modeSwitch.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
         
     }
     
@@ -90,22 +81,53 @@ extension SettingsViewController{
         view.addSubview(langSegmentedControl)
     }
     
+    func setupLangSegmentedControl(){
+        langSegmentedControl.insertSegment(withTitle: "RUS",  at: 0, animated: true)
+        langSegmentedControl.insertSegment(withTitle: "EN",  at: 1, animated: true)
+        if let delegate = delegate {
+            langSegmentedControl.selectedSegmentIndex = delegate.getLang().rawValue
+        }
+        else{
+            langSegmentedControl.selectedSegmentIndex = 0
+        }
+    }
+    
+    func setupModeSwitch(){
+        if let delegate = delegate {
+            modeSwitch.setOn(delegate.getPlayMode(), animated: true)
+        }
+        else{
+            modeSwitch.setOn(false, animated: true)
+        }
+    }
+    
+    func makeConstraints(){
+        langLabel.translatesAutoresizingMaskIntoConstraints = false
+        langLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        langLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
+        langSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        langSegmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
+        langSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
+        modeLabel.translatesAutoresizingMaskIntoConstraints = false
+        modeLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        modeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50).isActive = true
+        modeSwitch.translatesAutoresizingMaskIntoConstraints = false
+        modeSwitch.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        modeSwitch.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50).isActive = true
+    }
+    
     func setupNavigationBarIfPossible(){
         self.navigationItem.title = "Настройки"
         self.navigationController?.navigationBar.tintColor = .black
     }
     
-    @objc func segmentedValueChanged(_ sender:UISegmentedControl!) {
-        switch sender.selectedSegmentIndex{
-        case 0:
-            delegate?.changeLang(lang: .rus)
-        case 1:
-            delegate?.changeLang(lang: .en)
-        default:
-            delegate?.changeLang(lang: .rus)
+    func segmentedValueChanged() {
+        if let  lang = Lang(rawValue: langSegmentedControl.selectedSegmentIndex){
+            delegate?.changeLang(lang: lang)
         }
     }
-    @objc func switchStateDidChange(_ sender:UISwitch!){
-        delegate?.changePlayMode(mode: sender.isOn)
+    func switchStateDidChange(){
+        
+        delegate?.changePlayMode(mode: modeSwitch.isOn)
     }
 }
