@@ -25,7 +25,7 @@ protocol SettingsViewControllerDelegate: AnyObject {
     func getPlayMode() -> Bool
 }
 
-class SettingsViewController: UIViewController {
+final class SettingsViewController: UIViewController {
     
     weak var delegate: SettingsViewControllerDelegate?
     private lazy var modeSwitch:UISwitch = {

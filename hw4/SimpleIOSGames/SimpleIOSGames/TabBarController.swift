@@ -7,7 +7,8 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+final class TabBarController: UITabBarController {
+    private let dataStore = DataStore()
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -23,10 +24,6 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.isOpaque = true
-        tabBar.tintColor = .systemYellow
-        tabBar.unselectedItemTintColor = .white
-        tabBar.backgroundColor = .black
         setupTabBar()
     }
 }
@@ -35,15 +32,27 @@ class TabBarController: UITabBarController {
 private extension TabBarController {
     
     func setupTabBar() {
-        
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = .black
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance  = appearance
+        tabBar.isOpaque = false
+        tabBar.tintColor = .systemYellow
+        tabBar.unselectedItemTintColor = .white
+        let statisitcsViewController = StatisticsViewController()
+        let rpsViewController = RockPaperScissorsViewController()
+        let diceGameViewController = DiceGameViewController()
+        rpsViewController.delegate = statisitcsViewController
+        diceGameViewController.delegate = statisitcsViewController
         let navRockPaperScissors = UINavigationController(
-            rootViewController: RockPaperScissorsViewController()
+            rootViewController: rpsViewController
         )
         let navCDiceGame = UINavigationController(
-            rootViewController: DiceGameViewController()
+            rootViewController: diceGameViewController
         )
-        
-        
+        let navStatistics = UINavigationController(
+            rootViewController: statisitcsViewController
+        )
         navRockPaperScissors.tabBarItem = UITabBarItem(
             title: "RockPaperScissors",
             image: UIImage(
@@ -59,8 +68,14 @@ private extension TabBarController {
             ),
             tag: 1)
         
+        navStatistics.tabBarItem = UITabBarItem(
+            title: "Statistics",
+            image: UIImage(
+                systemName: "list.bullet.rectangle"
+            ),
+            tag: 2)
         setViewControllers([
-            navRockPaperScissors, navCDiceGame
+            navRockPaperScissors, navCDiceGame, navStatistics
         ], animated: true)
     }
 }
