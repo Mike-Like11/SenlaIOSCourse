@@ -32,10 +32,8 @@ final class DataStore{
         diceResults.append(item)
         return item
     }
-    var rpsResults:[RPSRoundResult] = [
-    ]
-    var diceResults:[DiceResult] = [
-    ]
+    var rpsResults:[RPSRoundResult] = []
+    var diceResults:[DiceResult] = []
     var bestRPSResults:RPSRoundResult?
     {
         get{
@@ -76,7 +74,7 @@ struct RPSRoundResult {
 }
 
 
-struct DiceResult:Equatable {
+struct DiceResult {
     let id: Int
     let imageUrl: String
 }

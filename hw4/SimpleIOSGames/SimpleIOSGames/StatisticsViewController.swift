@@ -21,7 +21,6 @@ final class StatisticsViewController: UIViewController {
         let view = UICollectionView(
             frame: .zero,
             collectionViewLayout: CollectionViewLayoutFactory.statisticsLayout())
-        view.backgroundView?.backgroundColor = .systemYellow
         view.backgroundColor = .systemYellow
         view.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         return view
@@ -46,9 +45,9 @@ extension StatisticsViewController:RPSable{
             createSnapshot()
         }
         let newItem = dataStore.appendRPSResult(round: round)
-        var snapshot = dataSource.snapshot()
-        snapshot.appendItems([.init(content: .rps(configuration: .init(id: newItem.id, round: newItem.round)))], toSection: .rps)
-        dataSource.apply(snapshot,animatingDifferences: true)
+        var snapshot = dataSource.snapshot(for: .rps)
+        snapshot.append([.init(content: .rps(configuration: .init(id: newItem.id, round: newItem.round)))])
+        dataSource.apply(snapshot, to: .dice,animatingDifferences: true)
         updateBestSection()
         
     }
@@ -61,9 +60,9 @@ extension StatisticsViewController:Diceable{
             createSnapshot()
         }
         let newItem = dataStore.appendDiceResult(imageUrl: imageUrl)
-        var snapshot = dataSource.snapshot()
-        snapshot.appendItems([.init(content: .dice(configuration: .init(id: newItem.id, imageUrl: newItem.imageUrl)))], toSection: .dice)
-        dataSource.apply(snapshot,animatingDifferences: true)
+        var snapshot = dataSource.snapshot(for: .dice)
+        snapshot.append([.init(content: .dice(configuration: .init(id: newItem.id, imageUrl: newItem.imageUrl)))])
+        dataSource.apply(snapshot, to: .dice,animatingDifferences: true)
         updateBestSection()
     }
     
