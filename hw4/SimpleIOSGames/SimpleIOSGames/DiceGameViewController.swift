@@ -19,7 +19,7 @@ enum DiceGameStatus{
 }
 
 
-class DiceGameViewController: UIViewController {
+final class DiceGameViewController: UIViewController {
     
     private var verticalStackView:UIStackView = {
         var verticalStackView = UIStackView()
@@ -103,6 +103,7 @@ class DiceGameViewController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
+    weak var delegate: Diceable?
     private var gameStatus: DiceGameStatus  = .prepared
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -129,12 +130,24 @@ private extension DiceGameViewController{
         fifthButtonOption.isHidden = true
         sixthButtonOption.isHidden = true
         switch randomImageNumber{
-        case 1: firstButtonOption.isHidden = false
-        case 2: secondButtonOption.isHidden = false
-        case 3: thirdButtonOption.isHidden = false
-        case 4: fourthButtonOption.isHidden = false
-        case 5: fifthButtonOption.isHidden = false
-        case 6: sixthButtonOption.isHidden = false
+        case 1:
+            firstButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.1")
+        case 2:
+            secondButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.2")
+        case 3:
+            thirdButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.3")
+        case 4:
+            fourthButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.4")
+        case 5:
+            fifthButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.5")
+        case 6:
+            sixthButtonOption.isHidden = false
+            delegate?.appendDiceResult(imageUrl: "die.face.6")
         default:
             break
         }

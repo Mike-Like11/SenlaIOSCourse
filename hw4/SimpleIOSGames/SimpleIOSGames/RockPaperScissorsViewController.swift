@@ -16,6 +16,33 @@ enum Result{
 }
 
 
+enum RPSVariants:Int{
+    case rock
+    case scissors
+    case paper
+    case none
+    func getImageUrl() -> String{
+        switch self {
+        case .rock:
+            return "Rock"
+        case .paper:
+            return "Paper"
+        case .scissors:
+            return "Scissors"
+        case.none:
+            return ""
+        }
+    }
+}
+
+
+struct RPSRound:Hashable{
+    var result:Result = .process
+    var youChoice:RPSVariants = .none
+    var opponentChoice:RPSVariants = .none
+}
+
+
 protocol TranslatedResults{
     func getTranslatedResults(result:Result)->String
     func getTranslatedButtonText() -> String
@@ -61,11 +88,12 @@ struct englishResults:  TranslatedResults{
     }
 }
 
-class RockPaperScissorsViewController: UIViewController {
+
+final class RockPaperScissorsViewController: UIViewController {
 
     var playMode: PlayMode = .drawDisabled
     var lang: Lang = .rus
-    var result:Result = .process
+    var round = RPSRound()
     var languageResults:TranslatedResults = russianResults()
     private var yourChoosenImage:UIImageView = {
         let imageView = UIImageView()
@@ -158,7 +186,7 @@ class RockPaperScissorsViewController: UIViewController {
         resultLabel.isHidden = true
         return resultLabel
     }()
-    
+    weak var delegate: RPSable?
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBarIfPossible()
@@ -256,36 +284,49 @@ private extension RockPaperScissorsViewController{
         self.navigationController?.pushViewController(settingViewController, animated: true)
     }
     
-    @objc func makeMove(_ sender:UIButton){
-        var randomImageNumber:Int
+    func resultCalculation(yourChoiceNumber:Int){
+        var opponentChoiceNumber:Int
         switch playMode{
         case .drawEnabled:
-            randomImageNumber = Int.random(in: 0..<3)
+            opponentChoiceNumber = Int.random(in: 0..<3)
         case .drawDisabled:
-            randomImageNumber = Int.random(in: sender.tag+1..<sender.tag+3) % 3
+            opponentChoiceNumber = Int.random(in: yourChoiceNumber+1..<yourChoiceNumber+3) % 3
         }
+        if(opponentChoiceNumber - yourChoiceNumber == 1 || (yourChoiceNumber == 2 && opponentChoiceNumber == 0)){
+            self.round.result = .victory
+        }
+        else{
+            if(opponentChoiceNumber == yourChoiceNumber){
+                self.round.result = .draw
+            }
+            
+            else {
+                self.round.result = .lose
+            }
+        }
+        if let yourChoice = RPSVariants(rawValue: yourChoiceNumber){
+            round.youChoice = yourChoice
+        }
+        if let opponentChoice = RPSVariants(rawValue: opponentChoiceNumber){
+            round.opponentChoice = opponentChoice
+        }
+        delegate?.appendRPSResult(round: round)
+    }
+    
+    @objc func makeMove(_ sender:UIButton){
+        resultCalculation(yourChoiceNumber: sender.tag)
         self.optionsStackView.isHidden = true
         UIView .transition(with:  (self.opponentChoosenImage), duration: 1, options: .transitionFlipFromLeft,
                            animations: { [self] in
-            self.opponentChoosenImage.image = UIImage(named: self.imageSrcOptions[randomImageNumber])?.withRenderingMode(.alwaysOriginal)
+            
+            self.opponentChoosenImage.image = UIImage(named: round.opponentChoice.getImageUrl())?.withRenderingMode(.alwaysOriginal)
         }, completion: nil)
         UIView .transition(with:  (self.yourChoosenImage), duration: 1, options: .transitionFlipFromRight,
                            animations: {
             self.yourChoosenImage.image = sender.imageView?.image
         }, completion: nil)
         self.yourChoosenImage.image = sender.imageView?.image
-        if(randomImageNumber - sender.tag == 1 || (sender.tag == 2 && randomImageNumber == 0)){
-            self.result = .victory
-        }
-        else{
-            if(randomImageNumber == sender.tag){
-                self.result = .draw
-            }
-            
-            else {
-                self.result = .lose
-            }
-        }
+        
         UIView.animate(withDuration: 0.2,
                        delay: 1,
                        options: .curveLinear,
@@ -301,7 +342,9 @@ private extension RockPaperScissorsViewController{
     func gameOn(){
         resultLabel.isHidden = true
         playButton.isHidden  = true
-        result = .process
+        round.result = .process
+        round.opponentChoice = .none
+        round.youChoice = .none
         yourChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
         opponentChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
         optionsStackView.isHidden = false
@@ -313,12 +356,8 @@ private extension RockPaperScissorsViewController{
     }
     
     func setupLangResult(){
-        resultLabel.text = languageResults.getTranslatedResults(result: result)
+        resultLabel.text = languageResults.getTranslatedResults(result: round.result)
     }
     
-    
-    func changeResult(result: Result) {
-        self.result = result
-    }
     
 }

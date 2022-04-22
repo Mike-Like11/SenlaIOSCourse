@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		270B221A28098E2100220878 /* DiceStatsContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 270B221928098E2100220878 /* DiceStatsContentConfiguration.swift */; };
+		271BBBDD2806F64F00C32B14 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBDC2806F64F00C32B14 /* DataStore.swift */; };
+		271BBBDF2806F87700C32B14 /* ResultCollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBDE2806F87700C32B14 /* ResultCollectionItem.swift */; };
+		271BBBE12806F90300C32B14 /* RPSResultContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBE02806F90300C32B14 /* RPSResultContentConfiguration.swift */; };
+		271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBE72807599C00C32B14 /* StatisticsViewController.swift */; };
+		271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */; };
+		27AAF56128085ACE002982D9 /* DiceResultContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AAF56028085ACE002982D9 /* DiceResultContentConfiguration.swift */; };
 		27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */; };
 		27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */; };
 		27E0EDF227F4D96F00FA35C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27E0EDF127F4D96F00FA35C8 /* Assets.xcassets */; };
@@ -18,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		270B221928098E2100220878 /* DiceStatsContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceStatsContentConfiguration.swift; sourceTree = "<group>"; };
+		271BBBDC2806F64F00C32B14 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		271BBBDE2806F87700C32B14 /* ResultCollectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultCollectionItem.swift; sourceTree = "<group>"; };
+		271BBBE02806F90300C32B14 /* RPSResultContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSResultContentConfiguration.swift; sourceTree = "<group>"; };
+		271BBBE72807599C00C32B14 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutFactory.swift; sourceTree = "<group>"; };
+		27AAF56028085ACE002982D9 /* DiceResultContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceResultContentConfiguration.swift; sourceTree = "<group>"; };
 		27E0EDE527F4D96F00FA35C8 /* SimpleIOSGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleIOSGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -41,9 +55,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		271BBBDB2806F61200C32B14 /* DataStore */ = {
+			isa = PBXGroup;
+			children = (
+				271BBBDC2806F64F00C32B14 /* DataStore.swift */,
+				271BBBDE2806F87700C32B14 /* ResultCollectionItem.swift */,
+				271BBBE02806F90300C32B14 /* RPSResultContentConfiguration.swift */,
+				27AAF56028085ACE002982D9 /* DiceResultContentConfiguration.swift */,
+				270B221928098E2100220878 /* DiceStatsContentConfiguration.swift */,
+			);
+			path = DataStore;
+			sourceTree = "<group>";
+		};
+		271BBBE928075C5300C32B14 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 		27E0EDDC27F4D96F00FA35C8 = {
 			isa = PBXGroup;
 			children = (
+				271BBBE928075C5300C32B14 /* UIKit */,
+				271BBBDB2806F61200C32B14 /* DataStore */,
 				27E0EDE727F4D96F00FA35C8 /* SimpleIOSGames */,
 				27E0EDE627F4D96F00FA35C8 /* Products */,
 			);
@@ -60,6 +96,7 @@
 		27E0EDE727F4D96F00FA35C8 /* SimpleIOSGames */ = {
 			isa = PBXGroup;
 			children = (
+				271BBBE72807599C00C32B14 /* StatisticsViewController.swift */,
 				27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */,
 				27E0EDFC27F4DA4900FA35C8 /* TabBarController.swift */,
 				27E0EDFE27F4DA9600FA35C8 /* RockPaperScissorsViewController.swift */,
@@ -143,12 +180,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				271BBBDD2806F64F00C32B14 /* DataStore.swift in Sources */,
+				270B221A28098E2100220878 /* DiceStatsContentConfiguration.swift in Sources */,
 				27E0EE0127F4DBE300FA35C8 /* DiceGameViewController.swift in Sources */,
 				27E0EE0327F4EF6000FA35C8 /* SettingsViewController.swift in Sources */,
+				27AAF56128085ACE002982D9 /* DiceResultContentConfiguration.swift in Sources */,
 				27E0EDFF27F4DA9600FA35C8 /* RockPaperScissorsViewController.swift in Sources */,
+				271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */,
 				27E0EDFD27F4DA4900FA35C8 /* TabBarController.swift in Sources */,
+				271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */,
 				27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */,
+				271BBBE12806F90300C32B14 /* RPSResultContentConfiguration.swift in Sources */,
 				27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */,
+				271BBBDF2806F87700C32B14 /* ResultCollectionItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
