@@ -53,6 +53,9 @@ private extension TabBarController {
         let navStatistics = UINavigationController(
             rootViewController: statisitcsViewController
         )
+        let navRocket = UINavigationController(
+            rootViewController: RocketViewController()
+        )
         navRockPaperScissors.tabBarItem = UITabBarItem(
             title: "RockPaperScissors",
             image: UIImage(
@@ -74,8 +77,14 @@ private extension TabBarController {
                 systemName: "list.bullet.rectangle"
             ),
             tag: 2)
+        navRocket.tabBarItem = UITabBarItem(
+            title: "Rocket",
+            image: UIImage(
+                systemName: "arrow.up"
+            ),
+            tag: 3)
         setViewControllers([
-            navRockPaperScissors, navCDiceGame, navStatistics
+            navRocket, navRockPaperScissors, navCDiceGame, navStatistics
         ], animated: true)
     }
 }
