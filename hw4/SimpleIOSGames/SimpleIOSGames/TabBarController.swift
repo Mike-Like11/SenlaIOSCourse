@@ -39,7 +39,7 @@ private extension TabBarController {
         tabBar.isOpaque = false
         tabBar.tintColor = .systemYellow
         tabBar.unselectedItemTintColor = .white
-        let statisitcsViewController = StatisticsViewController()
+        let statisitcsViewController = HistoryViewController()
         let rpsViewController = RockPaperScissorsViewController()
         let diceGameViewController = DiceGameViewController()
         rpsViewController.delegate = statisitcsViewController

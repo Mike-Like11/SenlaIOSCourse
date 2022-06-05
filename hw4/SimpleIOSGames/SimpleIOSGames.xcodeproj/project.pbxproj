@@ -14,6 +14,12 @@
 		271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBE72807599C00C32B14 /* StatisticsViewController.swift */; };
 		271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */; };
 		2769F18E2815854900AC7116 /* RocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2769F18D2815854900AC7116 /* RocketViewController.swift */; };
+		27752694284A02C900F900FF /* HistoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775268E284A02C900F900FF /* HistoryPresenter.swift */; };
+		27752695284A02C900F900FF /* HistoryWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775268F284A02C900F900FF /* HistoryWorker.swift */; };
+		27752696284A02C900F900FF /* HistoryRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27752690284A02C900F900FF /* HistoryRouter.swift */; };
+		27752697284A02C900F900FF /* HistoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27752691284A02C900F900FF /* HistoryModels.swift */; };
+		27752698284A02C900F900FF /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27752692284A02C900F900FF /* HistoryViewController.swift */; };
+		27752699284A02C900F900FF /* HistoryInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27752693284A02C900F900FF /* HistoryInteractor.swift */; };
 		27AAF56128085ACE002982D9 /* DiceResultContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27AAF56028085ACE002982D9 /* DiceResultContentConfiguration.swift */; };
 		27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */; };
 		27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E0EDEA27F4D96F00FA35C8 /* SceneDelegate.swift */; };
@@ -33,6 +39,12 @@
 		271BBBE72807599C00C32B14 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutFactory.swift; sourceTree = "<group>"; };
 		2769F18D2815854900AC7116 /* RocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RocketViewController.swift; sourceTree = "<group>"; };
+		2775268E284A02C900F900FF /* HistoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPresenter.swift; sourceTree = "<group>"; };
+		2775268F284A02C900F900FF /* HistoryWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryWorker.swift; sourceTree = "<group>"; };
+		27752690284A02C900F900FF /* HistoryRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryRouter.swift; sourceTree = "<group>"; };
+		27752691284A02C900F900FF /* HistoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModels.swift; sourceTree = "<group>"; };
+		27752692284A02C900F900FF /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		27752693284A02C900F900FF /* HistoryInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryInteractor.swift; sourceTree = "<group>"; };
 		27AAF56028085ACE002982D9 /* DiceResultContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceResultContentConfiguration.swift; sourceTree = "<group>"; };
 		27E0EDE527F4D96F00FA35C8 /* SimpleIOSGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleIOSGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E0EDE827F4D96F00FA35C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,9 +89,23 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
+		2775268D284A029600F900FF /* Clean */ = {
+			isa = PBXGroup;
+			children = (
+				2775268E284A02C900F900FF /* HistoryPresenter.swift */,
+				2775268F284A02C900F900FF /* HistoryWorker.swift */,
+				27752690284A02C900F900FF /* HistoryRouter.swift */,
+				27752691284A02C900F900FF /* HistoryModels.swift */,
+				27752692284A02C900F900FF /* HistoryViewController.swift */,
+				27752693284A02C900F900FF /* HistoryInteractor.swift */,
+			);
+			path = Clean;
+			sourceTree = "<group>";
+		};
 		27E0EDDC27F4D96F00FA35C8 = {
 			isa = PBXGroup;
 			children = (
+				2775268D284A029600F900FF /* Clean */,
 				271BBBE928075C5300C32B14 /* UIKit */,
 				271BBBDB2806F61200C32B14 /* DataStore */,
 				27E0EDE727F4D96F00FA35C8 /* SimpleIOSGames */,
@@ -189,12 +215,18 @@
 				27E0EE0327F4EF6000FA35C8 /* SettingsViewController.swift in Sources */,
 				27AAF56128085ACE002982D9 /* DiceResultContentConfiguration.swift in Sources */,
 				27E0EDFF27F4DA9600FA35C8 /* RockPaperScissorsViewController.swift in Sources */,
+				27752697284A02C900F900FF /* HistoryModels.swift in Sources */,
+				27752699284A02C900F900FF /* HistoryInteractor.swift in Sources */,
 				271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */,
 				27E0EDFD27F4DA4900FA35C8 /* TabBarController.swift in Sources */,
 				271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */,
 				27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */,
+				27752696284A02C900F900FF /* HistoryRouter.swift in Sources */,
+				27752695284A02C900F900FF /* HistoryWorker.swift in Sources */,
+				27752694284A02C900F900FF /* HistoryPresenter.swift in Sources */,
 				2769F18E2815854900AC7116 /* RocketViewController.swift in Sources */,
 				271BBBE12806F90300C32B14 /* RPSResultContentConfiguration.swift in Sources */,
+				27752698284A02C900F900FF /* HistoryViewController.swift in Sources */,
 				27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */,
 				271BBBDF2806F87700C32B14 /* ResultCollectionItem.swift in Sources */,
 			);

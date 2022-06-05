@@ -90,7 +90,7 @@ struct englishResults:  TranslatedResults{
 
 
 final class RockPaperScissorsViewController: UIViewController {
-
+    
     var playMode: PlayMode = .drawDisabled
     var lang: Lang = .rus
     var round = RPSRound()
@@ -186,7 +186,7 @@ final class RockPaperScissorsViewController: UIViewController {
         resultLabel.isHidden = true
         return resultLabel
     }()
-    weak var delegate: RPSable?
+    var delegate: HistoryAppendRPSLogic?
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBarIfPossible()
