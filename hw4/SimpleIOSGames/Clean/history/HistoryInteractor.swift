@@ -14,9 +14,7 @@ import UIKit
 
 protocol HistoryBusinessLogic
 {
-    func appendDiceResult(request: History.AppendDiceResult.Request)
     func fetchDiceResults(request: History.GetListDiceResult.Request)
-    func appendRPSResult(request: History.AppendRPSResult.Request)
     func fetchRPSResults(request: History.GetListRPSResult.Request)
     func fetchBestDiceResults(request: History.GetBestDiceResult.Request)
     func fetchBestRPSResults(request: History.GetBestRPSResults.Request)
@@ -25,9 +23,7 @@ protocol HistoryBusinessLogic
 
 protocol HistoryDataStore
 {
-    var diceResult: DiceResult? { get }
     var diceResults: [DiceResult]? { get }
-    var rpsResult: RPSRoundResult? { get }
     var rpsResults: [RPSRoundResult]? { get }
     var bestRPSResults: RPSRoundResult? { get }
     var bestDiceResults: [(DiceResult,Float)]? { get }
@@ -39,22 +35,12 @@ class HistoryInteractor: HistoryBusinessLogic, HistoryDataStore
     var bestRPSResults: RPSRoundResult?
     var bestDiceResults: [(DiceResult, Float)]?
     var diceResults: [DiceResult]?
-    var diceResult:DiceResult?
-    var rpsResult: RPSRoundResult?
     var rpsResults: [RPSRoundResult]?
     var presenter: HistoryPresentationLogic?
-    var worker: HistoryWorker = HistoryWorker(dataStore: DataStore())
-    func appendDiceResult(request: History.AppendDiceResult.Request)
-    {
-        diceResult = worker.appendDiceResult(imageUrl: request.imageUrl)
-        if let diceResult = diceResult {
-            let response = History.AppendDiceResult.Response(diceResult: diceResult)
-            presenter?.presentNewDiceResult(response: response)
-        }
-    }
+    var worker: HistoryWorker?
     func fetchBestDiceResults(request: History.GetBestDiceResult.Request)
     {
-        bestDiceResults = worker.getBestDiceResults()
+        bestDiceResults = worker?.getBestDiceResults()
         if let bestDiceResults = bestDiceResults {
             let response = History.GetBestDiceResult.Response(diceResults: bestDiceResults)
             presenter?.presentBestDiceResults(response: response)
@@ -62,7 +48,7 @@ class HistoryInteractor: HistoryBusinessLogic, HistoryDataStore
     }
     func fetchBestRPSResults(request: History.GetBestRPSResults.Request)
     {
-        bestRPSResults = worker.getBestRPSResults()
+        bestRPSResults = worker?.getBestRPSResults()
         if let bestRPSResults = bestRPSResults {
             let response = History.GetBestRPSResults.Response(rpsResults: bestRPSResults)
             presenter?.presentBestRPSResults(response: response)
@@ -70,23 +56,15 @@ class HistoryInteractor: HistoryBusinessLogic, HistoryDataStore
     }
     func fetchDiceResults(request: History.GetListDiceResult.Request)
     {
-        diceResults = worker.getListDiceResult()
+        diceResults = worker?.getListDiceResult()
         if let diceResults = diceResults {
             let response = History.GetListDiceResult.Response(diceResults: diceResults)
             presenter?.presentListDiceResults(response: response)
         }
     }
-    func appendRPSResult(request: History.AppendRPSResult.Request)
-    {
-        rpsResult = worker.appendRPSResult(round: request.round)
-        if let rpsResult = rpsResult {
-            let response = History.AppendRPSResult.Response(rpsResult: rpsResult)
-            presenter?.presentNewRPSResult(response: response)
-        }
-    }
     func fetchRPSResults(request: History.GetListRPSResult.Request)
     {
-        rpsResults = worker.getListRPSResult()
+        rpsResults = worker?.getListRPSResult()
         if let rpsResults = rpsResults {
             let response = History.GetListRPSResult.Response(rpsResults: rpsResults)
             presenter?.presentListRPSResults(response: response)

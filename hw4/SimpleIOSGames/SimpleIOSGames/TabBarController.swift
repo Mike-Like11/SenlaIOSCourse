@@ -8,7 +8,7 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    private let dataStore = DataStore()
+    private var dataStore = DataStore()
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -39,9 +39,9 @@ private extension TabBarController {
         tabBar.isOpaque = false
         tabBar.tintColor = .systemYellow
         tabBar.unselectedItemTintColor = .white
-        let statisitcsViewController = HistoryViewController()
-        let rpsViewController = RockPaperScissorsViewController()
-        let diceGameViewController = DiceGameViewController()
+        let statisitcsViewController = HistoryViewController(dataStore: dataStore)
+        let rpsViewController = RockPaperScissorsViewController(dataStore: dataStore)
+        let diceGameViewController = DiceGameViewController(dataStore: dataStore)
         rpsViewController.delegate = statisitcsViewController
         diceGameViewController.delegate = statisitcsViewController
         let navRockPaperScissors = UINavigationController(

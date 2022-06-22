@@ -19,8 +19,22 @@ enum DiceGameStatus{
 }
 
 
+
+protocol AppendDiceLogic: AnyObject
+{
+    func appendDiceResult(imageUrl:String)
+}
+
+
+protocol DiceGameDisplayLogic: AnyObject
+{
+    func displayNewDiceResult(viewModel: DiceGame.AppendDiceResult.ViewModel)
+}
+
+
 final class DiceGameViewController: UIViewController {
-    
+    var interactor: DiceGameBusinessLogic?
+    var router: (NSObjectProtocol  & DiceGameDataPassing)?
     private var verticalStackView:UIStackView = {
         var verticalStackView = UIStackView()
         verticalStackView.axis = .horizontal
@@ -103,7 +117,7 @@ final class DiceGameViewController: UIViewController {
         stackView.distribution = .fillEqually
         return stackView
     }()
-    var delegate: HistoryAppendDiceLogic?
+    var delegate: HistoryAppendDiceDisplayLogic?
     private var gameStatus: DiceGameStatus  = .prepared
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -115,6 +129,48 @@ final class DiceGameViewController: UIViewController {
         view.backgroundColor = .systemYellow
         addSubviews()
         makeConstraints()
+    }
+    
+    init(dataStore: DataStore) {
+        super.init(nibName: nil, bundle: nil)
+        setup(dataStore: dataStore)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setup(dataStore: DataStore)
+    {
+        let viewController = self
+        let interactor = DiceGameInteractor()
+        let presenter = DiceGamePresenter()
+        interactor.worker = DiceGameWorker(dataStore: dataStore)
+        let router = DiceGameRouter()
+        viewController.interactor = interactor
+        viewController.router = router as! NSObjectProtocol & DiceGameDataPassing
+        interactor.presenter = presenter
+        presenter.viewController = viewController
+        router.viewController = viewController
+        router.dataStore = interactor
+    }
+}
+
+
+extension DiceGameViewController: AppendDiceLogic{
+    
+    func appendDiceResult(imageUrl: String)
+    {
+        interactor?.appendDiceResult(request: DiceGame.AppendDiceResult.Request(imageUrl: imageUrl))
+    }
+}
+
+
+extension DiceGameViewController: DiceGameDisplayLogic{
+    
+    func displayNewDiceResult(viewModel: DiceGame.AppendDiceResult.ViewModel)
+    {
+        delegate?.displayNewDiceResult(viewModel: viewModel)
     }
 }
 
@@ -152,7 +208,7 @@ private extension DiceGameViewController{
         default:
             break
         }
-        delegate?.appendDiceResult(imageUrl: imageUrl)
+        appendDiceResult(imageUrl: imageUrl)
         if(randomImageNumber % 2 == 0){
             oddStackView.isHidden = true
         }

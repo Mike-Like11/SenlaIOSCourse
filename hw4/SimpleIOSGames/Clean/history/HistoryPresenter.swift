@@ -14,9 +14,7 @@ import UIKit
 
 protocol HistoryPresentationLogic
 {
-    func presentNewDiceResult(response: History.AppendDiceResult.Response)
     func presentListDiceResults(response: History.GetListDiceResult.Response)
-    func presentNewRPSResult(response: History.AppendRPSResult.Response)
     func presentListRPSResults(response: History.GetListRPSResult.Response)
     func presentBestDiceResults(response: History.GetBestDiceResult.Response)
     func presentBestRPSResults(response: History.GetBestRPSResults.Response)
@@ -26,20 +24,10 @@ class HistoryPresenter: HistoryPresentationLogic
 {
     weak var viewController: HistoryDisplayLogic?
     
-    func presentNewDiceResult(response: History.AppendDiceResult.Response)
-    {
-        let viewModel = History.AppendDiceResult.ViewModel(diceResult: response.diceResult)
-        viewController?.displayNewDiceResult(viewModel: viewModel)
-    }
     func presentListDiceResults(response: History.GetListDiceResult.Response)
     {
         let viewModel = History.GetListDiceResult.ViewModel(diceResults: response.diceResults)
         viewController?.displayDiceResults(viewModel: viewModel)
-    }
-    func presentNewRPSResult(response: History.AppendRPSResult.Response)
-    {
-        let viewModel = History.AppendRPSResult.ViewModel(rpsResult: response.rpsResult)
-        viewController?.displayNewRPSResult(viewModel: viewModel)
     }
     func presentListRPSResults(response: History.GetListRPSResult.Response)
     {

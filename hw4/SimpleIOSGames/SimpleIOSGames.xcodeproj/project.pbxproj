@@ -13,6 +13,16 @@
 		271BBBE12806F90300C32B14 /* RPSResultContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBE02806F90300C32B14 /* RPSResultContentConfiguration.swift */; };
 		271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBE72807599C00C32B14 /* StatisticsViewController.swift */; };
 		271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */; };
+		273175C828630A180038864F /* DiceGamePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175C228630A180038864F /* DiceGamePresenter.swift */; };
+		273175C928630A180038864F /* DiceGameWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175C328630A180038864F /* DiceGameWorker.swift */; };
+		273175CA28630A180038864F /* DiceGameRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175C428630A180038864F /* DiceGameRouter.swift */; };
+		273175CB28630A180038864F /* DiceGameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175C528630A180038864F /* DiceGameModels.swift */; };
+		273175CD28630A180038864F /* DiceGameInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175C728630A180038864F /* DiceGameInteractor.swift */; };
+		273175D428630A430038864F /* RockPaperScissorsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175CE28630A430038864F /* RockPaperScissorsPresenter.swift */; };
+		273175D528630A430038864F /* RockPaperScissorsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175CF28630A430038864F /* RockPaperScissorsWorker.swift */; };
+		273175D628630A430038864F /* RockPaperScissorsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175D028630A430038864F /* RockPaperScissorsRouter.swift */; };
+		273175D728630A430038864F /* RockPaperScissorsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175D128630A430038864F /* RockPaperScissorsModels.swift */; };
+		273175D928630A430038864F /* RockPaperScissorsInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 273175D328630A430038864F /* RockPaperScissorsInteractor.swift */; };
 		2769F18E2815854900AC7116 /* RocketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2769F18D2815854900AC7116 /* RocketViewController.swift */; };
 		27752694284A02C900F900FF /* HistoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775268E284A02C900F900FF /* HistoryPresenter.swift */; };
 		27752695284A02C900F900FF /* HistoryWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2775268F284A02C900F900FF /* HistoryWorker.swift */; };
@@ -38,6 +48,16 @@
 		271BBBE02806F90300C32B14 /* RPSResultContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RPSResultContentConfiguration.swift; sourceTree = "<group>"; };
 		271BBBE72807599C00C32B14 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		271BBBEA28075C6F00C32B14 /* CollectionViewLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutFactory.swift; sourceTree = "<group>"; };
+		273175C228630A180038864F /* DiceGamePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceGamePresenter.swift; sourceTree = "<group>"; };
+		273175C328630A180038864F /* DiceGameWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceGameWorker.swift; sourceTree = "<group>"; };
+		273175C428630A180038864F /* DiceGameRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceGameRouter.swift; sourceTree = "<group>"; };
+		273175C528630A180038864F /* DiceGameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceGameModels.swift; sourceTree = "<group>"; };
+		273175C728630A180038864F /* DiceGameInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceGameInteractor.swift; sourceTree = "<group>"; };
+		273175CE28630A430038864F /* RockPaperScissorsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsPresenter.swift; sourceTree = "<group>"; };
+		273175CF28630A430038864F /* RockPaperScissorsWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsWorker.swift; sourceTree = "<group>"; };
+		273175D028630A430038864F /* RockPaperScissorsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsRouter.swift; sourceTree = "<group>"; };
+		273175D128630A430038864F /* RockPaperScissorsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsModels.swift; sourceTree = "<group>"; };
+		273175D328630A430038864F /* RockPaperScissorsInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsInteractor.swift; sourceTree = "<group>"; };
 		2769F18D2815854900AC7116 /* RocketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RocketViewController.swift; sourceTree = "<group>"; };
 		2775268E284A02C900F900FF /* HistoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryPresenter.swift; sourceTree = "<group>"; };
 		2775268F284A02C900F900FF /* HistoryWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryWorker.swift; sourceTree = "<group>"; };
@@ -89,7 +109,7 @@
 			path = UIKit;
 			sourceTree = "<group>";
 		};
-		2775268D284A029600F900FF /* Clean */ = {
+		273175BF286309C30038864F /* history */ = {
 			isa = PBXGroup;
 			children = (
 				2775268E284A02C900F900FF /* HistoryPresenter.swift */,
@@ -98,6 +118,40 @@
 				27752691284A02C900F900FF /* HistoryModels.swift */,
 				27752692284A02C900F900FF /* HistoryViewController.swift */,
 				27752693284A02C900F900FF /* HistoryInteractor.swift */,
+			);
+			path = history;
+			sourceTree = "<group>";
+		};
+		273175C0286309DA0038864F /* rps */ = {
+			isa = PBXGroup;
+			children = (
+				273175CE28630A430038864F /* RockPaperScissorsPresenter.swift */,
+				273175CF28630A430038864F /* RockPaperScissorsWorker.swift */,
+				273175D028630A430038864F /* RockPaperScissorsRouter.swift */,
+				273175D128630A430038864F /* RockPaperScissorsModels.swift */,
+				273175D328630A430038864F /* RockPaperScissorsInteractor.swift */,
+			);
+			path = rps;
+			sourceTree = "<group>";
+		};
+		273175C1286309E00038864F /* dice */ = {
+			isa = PBXGroup;
+			children = (
+				273175C228630A180038864F /* DiceGamePresenter.swift */,
+				273175C328630A180038864F /* DiceGameWorker.swift */,
+				273175C428630A180038864F /* DiceGameRouter.swift */,
+				273175C528630A180038864F /* DiceGameModels.swift */,
+				273175C728630A180038864F /* DiceGameInteractor.swift */,
+			);
+			path = dice;
+			sourceTree = "<group>";
+		};
+		2775268D284A029600F900FF /* Clean */ = {
+			isa = PBXGroup;
+			children = (
+				273175C1286309E00038864F /* dice */,
+				273175C0286309DA0038864F /* rps */,
+				273175BF286309C30038864F /* history */,
 			);
 			path = Clean;
 			sourceTree = "<group>";
@@ -211,6 +265,12 @@
 			files = (
 				271BBBDD2806F64F00C32B14 /* DataStore.swift in Sources */,
 				270B221A28098E2100220878 /* DiceStatsContentConfiguration.swift in Sources */,
+				273175CB28630A180038864F /* DiceGameModels.swift in Sources */,
+				273175D728630A430038864F /* RockPaperScissorsModels.swift in Sources */,
+				273175D928630A430038864F /* RockPaperScissorsInteractor.swift in Sources */,
+				273175D628630A430038864F /* RockPaperScissorsRouter.swift in Sources */,
+				273175C928630A180038864F /* DiceGameWorker.swift in Sources */,
+				273175C828630A180038864F /* DiceGamePresenter.swift in Sources */,
 				27E0EE0127F4DBE300FA35C8 /* DiceGameViewController.swift in Sources */,
 				27E0EE0327F4EF6000FA35C8 /* SettingsViewController.swift in Sources */,
 				27AAF56128085ACE002982D9 /* DiceResultContentConfiguration.swift in Sources */,
@@ -219,16 +279,20 @@
 				27752699284A02C900F900FF /* HistoryInteractor.swift in Sources */,
 				271BBBE82807599C00C32B14 /* StatisticsViewController.swift in Sources */,
 				27E0EDFD27F4DA4900FA35C8 /* TabBarController.swift in Sources */,
+				273175CA28630A180038864F /* DiceGameRouter.swift in Sources */,
 				271BBBEB28075C6F00C32B14 /* CollectionViewLayoutFactory.swift in Sources */,
 				27E0EDE927F4D96F00FA35C8 /* AppDelegate.swift in Sources */,
 				27752696284A02C900F900FF /* HistoryRouter.swift in Sources */,
 				27752695284A02C900F900FF /* HistoryWorker.swift in Sources */,
+				273175D428630A430038864F /* RockPaperScissorsPresenter.swift in Sources */,
 				27752694284A02C900F900FF /* HistoryPresenter.swift in Sources */,
 				2769F18E2815854900AC7116 /* RocketViewController.swift in Sources */,
 				271BBBE12806F90300C32B14 /* RPSResultContentConfiguration.swift in Sources */,
 				27752698284A02C900F900FF /* HistoryViewController.swift in Sources */,
 				27E0EDEB27F4D96F00FA35C8 /* SceneDelegate.swift in Sources */,
 				271BBBDF2806F87700C32B14 /* ResultCollectionItem.swift in Sources */,
+				273175D528630A430038864F /* RockPaperScissorsWorker.swift in Sources */,
+				273175CD28630A180038864F /* DiceGameInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

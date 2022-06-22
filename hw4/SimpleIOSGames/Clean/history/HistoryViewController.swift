@@ -14,21 +14,25 @@ import UIKit
 
 protocol HistoryDisplayLogic: AnyObject
 {
-    func displayNewDiceResult(viewModel: History.AppendDiceResult.ViewModel)
     func displayDiceResults(viewModel: History.GetListDiceResult.ViewModel)
-    func displayNewRPSResult(viewModel: History.AppendRPSResult.ViewModel)
     func displayRPSResults(viewModel: History.GetListRPSResult.ViewModel)
     func displayBestRPSResults(viewModel: History.GetBestRPSResults.ViewModel)
     func displayBestDiceResults(viewModel: History.GetBestDiceResult.ViewModel)
 }
-protocol HistoryAppendDiceLogic: AnyObject
+
+
+protocol HistoryAppendDiceDisplayLogic: AnyObject
 {
-    func appendDiceResult(imageUrl:String)
+    func displayNewDiceResult(viewModel: DiceGame.AppendDiceResult.ViewModel)
 }
-protocol HistoryAppendRPSLogic: AnyObject
+
+
+protocol HistoryAppendRPSDisplayLogic: AnyObject
 {
-    func appendRPSResult(round:RPSRound)
+    func displayNewRPSResult(viewModel: RockPaperScissors.AppendRPSResult.ViewModel)
 }
+
+
 class HistoryViewController: UIViewController
 {
     var interactor: HistoryBusinessLogic?
@@ -45,20 +49,21 @@ class HistoryViewController: UIViewController
         (DiceResult(id: 5, imageUrl: "die.face.5"),0),
         (DiceResult(id: 6, imageUrl: "die.face.6"),0),
     ]
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
+    init(dataStore: DataStore) {
+        super.init(nibName: nil, bundle: nil)
+        setup(dataStore: dataStore)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    private func setup()
+    private func setup(dataStore: DataStore)
     {
         let viewController = self
         let interactor = HistoryInteractor()
         let presenter = HistoryPresenter()
         let router = HistoryRouter()
+        interactor.worker = HistoryWorker(dataStore: dataStore)
         viewController.interactor = interactor
         viewController.router = router as! NSObjectProtocol & HistoryDataPassing
         interactor.presenter = presenter
@@ -87,16 +92,32 @@ class HistoryViewController: UIViewController
 }
 
 
-extension HistoryViewController: HistoryAppendRPSLogic{
-    func appendRPSResult(round:RPSRound) {
-        interactor?.appendRPSResult(request: History.AppendRPSResult.Request(round: round))
+extension HistoryViewController: HistoryAppendRPSDisplayLogic{
+    func displayNewRPSResult(viewModel: RockPaperScissors.AppendRPSResult.ViewModel)
+    {
+        if(rpsResults.isEmpty){
+            createSnapshot()
+        }
+        rpsResults.append(viewModel.rpsResult)
+        var snapshot = dataSource.snapshot(for: .rps)
+        snapshot.append([.init(content: .rps(configuration: .init(id: viewModel.rpsResult.id, round: viewModel.rpsResult.round)))])
+        dataSource.apply(snapshot, to: .rps,animatingDifferences: true)
+        fetchBestRPSResults()
     }
 }
 
 
-extension HistoryViewController: HistoryAppendDiceLogic{
-    func appendDiceResult(imageUrl: String) {
-        interactor?.appendDiceResult(request: History.AppendDiceResult.Request(imageUrl: imageUrl))
+extension HistoryViewController: HistoryAppendDiceDisplayLogic{
+    func displayNewDiceResult(viewModel: DiceGame.AppendDiceResult.ViewModel)
+    {
+        if(diceResults.isEmpty){
+            createSnapshot()
+        }
+        diceResults.append(viewModel.diceResult)
+        var snapshot = dataSource.snapshot(for: .dice)
+        snapshot.append([.init(content: .dice(configuration: .init(id: viewModel.diceResult.id, imageUrl: viewModel.diceResult.imageUrl)))])
+        dataSource.apply(snapshot, to: .dice,animatingDifferences: true)
+        fetchBestDiceResults()
     }
 }
 
@@ -108,17 +129,6 @@ extension HistoryViewController: HistoryDisplayLogic{
     {
         diceResults = viewModel.diceResults
         createSnapshot()
-    }
-    func displayNewDiceResult(viewModel: History.AppendDiceResult.ViewModel)
-    {
-        if(diceResults.isEmpty){
-            createSnapshot()
-        }
-        diceResults.append(viewModel.diceResult)
-        var snapshot = dataSource.snapshot(for: .dice)
-        snapshot.append([.init(content: .dice(configuration: .init(id: viewModel.diceResult.id, imageUrl: viewModel.diceResult.imageUrl)))])
-        dataSource.apply(snapshot, to: .dice,animatingDifferences: true)
-        fetchBestDiceResults()
     }
     func displayRPSResults(viewModel: History.GetListRPSResult.ViewModel)
     {
@@ -136,17 +146,6 @@ extension HistoryViewController: HistoryDisplayLogic{
             bestDiceResults = newBestDiceResults
         }
         updateBestSection()
-    }
-    func displayNewRPSResult(viewModel: History.AppendRPSResult.ViewModel)
-    {
-        if(rpsResults.isEmpty){
-            createSnapshot()
-        }
-        rpsResults.append(viewModel.rpsResult)
-        var snapshot = dataSource.snapshot(for: .rps)
-        snapshot.append([.init(content: .rps(configuration: .init(id: viewModel.rpsResult.id, round: viewModel.rpsResult.round)))])
-        dataSource.apply(snapshot, to: .rps,animatingDifferences: true)
-        fetchBestRPSResults()
     }
     func fetchBestRPSResults()
     {
