@@ -34,7 +34,7 @@ protocol DiceGameDisplayLogic: AnyObject
 
 final class DiceGameViewController: UIViewController {
     var interactor: DiceGameBusinessLogic?
-    var router: (NSObjectProtocol  & DiceGameDataPassing)?
+    var router: DiceGameDataPassing?
     private var verticalStackView:UIStackView = {
         var verticalStackView = UIStackView()
         verticalStackView.axis = .horizontal
@@ -148,7 +148,7 @@ final class DiceGameViewController: UIViewController {
         interactor.worker = DiceGameWorker(dataStore: dataStore)
         let router = DiceGameRouter()
         viewController.interactor = interactor
-        viewController.router = router as! NSObjectProtocol & DiceGameDataPassing
+        viewController.router = router
         interactor.presenter = presenter
         presenter.viewController = viewController
         router.viewController = viewController

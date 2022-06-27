@@ -108,17 +108,17 @@ final class RockPaperScissorsViewController: UIViewController {
     var round = RPSRound()
     var languageResults:TranslatedResults = russianResults()
     var interactor: RockPaperScissorsBusinessLogic?
-    var router: (NSObjectProtocol  & RockPaperScissorsDataPassing)?
+    var router: RockPaperScissorsDataPassing?
     private var yourChoosenImage:UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
+        imageView.image = UIImage(named: "Rock")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
     private var opponentChoosenImage:UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
+        imageView.image = UIImage(named: "Rock")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -230,7 +230,7 @@ final class RockPaperScissorsViewController: UIViewController {
         interactor.worker = RockPaperScissorsWorker(dataStore: dataStore)
         let router = RockPaperScissorsRouter()
         viewController.interactor = interactor
-        viewController.router = router as! NSObjectProtocol & RockPaperScissorsDataPassing
+        viewController.router = router
         interactor.presenter = presenter
         presenter.viewController = viewController
         router.viewController = viewController
@@ -372,7 +372,7 @@ private extension RockPaperScissorsViewController{
         UIView .transition(with:  (self.opponentChoosenImage), duration: 1, options: .transitionFlipFromLeft,
                            animations: { [self] in
             
-            self.opponentChoosenImage.image = UIImage(named: round.opponentChoice.getImageUrl())?.withRenderingMode(.alwaysOriginal)
+            self.opponentChoosenImage.image = UIImage(named: round.opponentChoice.getImageUrl())
         }, completion: nil)
         UIView .transition(with:  (self.yourChoosenImage), duration: 1, options: .transitionFlipFromRight,
                            animations: {
@@ -398,8 +398,8 @@ private extension RockPaperScissorsViewController{
         round.result = .process
         round.opponentChoice = .none
         round.youChoice = .none
-        yourChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
-        opponentChoosenImage.image = UIImage(named: "Rock")?.withRenderingMode(.alwaysOriginal)
+        yourChoosenImage.image = UIImage(named: "Rock")
+        opponentChoosenImage.image = UIImage(named: "Rock")
         optionsStackView.isHidden = false
         playButton.isHidden  = true
     }

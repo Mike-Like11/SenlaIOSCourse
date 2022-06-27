@@ -8,7 +8,7 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-    private var dataStore = DataStore()
+    private let dataStore = DataStore()
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)

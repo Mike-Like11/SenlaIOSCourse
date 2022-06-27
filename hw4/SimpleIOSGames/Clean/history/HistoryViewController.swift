@@ -36,7 +36,7 @@ protocol HistoryAppendRPSDisplayLogic: AnyObject
 class HistoryViewController: UIViewController
 {
     var interactor: HistoryBusinessLogic?
-    var router: (NSObjectProtocol  & HistoryDataPassing)?
+    var router: HistoryDataPassing?
     var diceResults: [DiceResult] = []
     var rpsResults: [RPSRoundResult] = []
     var bestRPSResults:RPSRoundResult?
@@ -65,7 +65,7 @@ class HistoryViewController: UIViewController
         let router = HistoryRouter()
         interactor.worker = HistoryWorker(dataStore: dataStore)
         viewController.interactor = interactor
-        viewController.router = router as! NSObjectProtocol & HistoryDataPassing
+        viewController.router = router
         interactor.presenter = presenter
         presenter.viewController = viewController
         router.viewController = viewController
